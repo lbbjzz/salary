@@ -61,7 +61,7 @@ public class GeneratorCode {
         // 策略配置
         StrategyConfig strategy = new StrategyConfig();
         //映射的表名
-        strategy.setInclude("calculate", "dept", "employee", "import", "job", "salary");
+        strategy.setInclude("admin");
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
         //strategy.setSuperEntityClass("你自己的父类实体,没有就不用设置!");

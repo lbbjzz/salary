@@ -24,39 +24,30 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author D
- * @since 2020-07-22
+ * @since 2020-07-23
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="Employee对象", description="")
-public class Employee implements Serializable {
+@ApiModel(value="Admin对象", description="")
+public class Admin implements Serializable {
 
     private static final long serialVersionUID=1L;
 
-    @ApiModelProperty(value = "ID")
+    @ApiModelProperty(value = "管理员ID")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    @ApiModelProperty(value = "部门ID")
-    private Integer deptId;
+    @ApiModelProperty(value = "账号")
+    private String username;
 
-    @ApiModelProperty(value = "岗位ID")
-    private Integer jobId;
+    @ApiModelProperty(value = "密码")
+    private String password;
 
     @ApiModelProperty(value = "姓名")
     private String name;
 
-    @ApiModelProperty(value = "表示员工的性别（0：男，1：女）")
-    private Boolean sex;
-
-    @ApiModelProperty(value = "出生年月")
-    private Date birth;
-
-    @ApiModelProperty(value = "学历")
-    private String education;
-
-    @ApiModelProperty(value = "身份证号")
-    private String idCard;
+    @ApiModelProperty(value = "权限 只有一种")
+    private String position;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -69,9 +60,6 @@ public class Employee implements Serializable {
     @ApiModelProperty(value = "修改时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime modifyTime;
-
-    @ApiModelProperty(value = "表示员工的状态（0：离职，1：试用，2：在职）")
-    private Boolean status;
 
 
 }

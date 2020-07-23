@@ -26,9 +26,9 @@ public class TokenUtil {
     private AesEncryptUtil aesEncryptUtil;
 
     /**
-     * 过期时间 2天
+     * 过期时间 1天
      */
-    private static final long EXPIRE_DATE= 60 * 60 * 24 * 2;
+    private static final long EXPIRE_DATE= 60 * 60 * 24 * 1;
 
     /**
      * token密匙
