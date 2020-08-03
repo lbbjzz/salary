@@ -41,9 +41,6 @@ public class Import implements Serializable {
     @ApiModelProperty(value = "员工ID")
     private Integer employeeId;
 
-    @ApiModelProperty(value = "部门 ID")
-    private Integer deptId;
-
     @ApiModelProperty(value = "病假天数")
     private Integer sickLeaveDay;
 
