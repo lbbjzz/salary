@@ -2,4 +2,58 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zsc.salary.mapper.ImportMapper">
 
+    <insert id="insertImport" parameterType="java.util.List">
+        INSERT INTO import(employee_id, sick_leave_day, personal_leave_day, late_day, overtime_day, back_pay, create_time, modify_time)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+        (
+            #{item.employeeId},
+            #{item.sickLeaveDay},
+            #{item.personalLeaveDay},
+            #{item.lateDay},
+            #{item.overtimeDay},
+            #{item.backPay},
+            NOW(),
+            NOW()
+        )
+        </foreach>
+    </insert>
+
+    <select id="listImportVo" resultMap="importVo">
+        SELECT
+            i.id,
+            e.name employee_name,
+            d.name employee_dept,
+            j.name employee_job,
+            i.sick_leave_day,
+            i.personal_leave_day,
+            i.late_day,
+            i.overtime_day,
+            i.back_pay
+        FROM
+            import i,
+            employee e,
+            job j,
+            dept d
+        WHERE
+            i.employee_id = e.id
+          AND
+            e.dept_id = d.id
+          AND
+            e.job_id = j.id
+          AND
+            e.status != 0
+    </select>
+    
+    <resultMap id="importVo" type="com.zsc.salary.model.vo.ImportVo">
+        <id property="id" column="id"/>
+        <result property="employeeName" column="employee_name"/>
+        <result property="employeeDept" column="employee_dept"/>
+        <result property="employeeJob" column="employee_job"/>
+        <result property="sickLeaveDay" column="sick_leave_day"/>
+        <result property="personalLeaveDay" column="personal_leave_day"/>
+        <result property="lateDay" column="late_day"/>
+        <result property="overtimeDay" column="overtime_day"/>
+        <result property="backPay" column="back_pay"/>
+    </resultMap>
 </mapper>

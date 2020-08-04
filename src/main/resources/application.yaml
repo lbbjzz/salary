@@ -32,7 +32,7 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true   #关闭 驼峰命名 下划线 映射
-  mapper-locations: classpath:/com/zsc/salary/xml/*Mapper.xml
+  mapper-locations: classpath:/com/zsc/salary/mapper/xml/*Mapper.xml
   type-aliases-package: com.zsc.salary.model.pojo
   global-config:
     db-config:

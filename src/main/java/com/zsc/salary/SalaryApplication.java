@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableAsync
-@MapperScan("com.zsc.*.mapper")
+@MapperScan("com.zsc.salary.mapper")
 @SpringBootApplication
 @EnableScheduling
 public class SalaryApplication {

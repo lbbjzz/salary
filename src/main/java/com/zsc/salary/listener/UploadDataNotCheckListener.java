@@ -6,7 +6,6 @@ import com.zsc.salary.model.data.UploadData;
 import com.zsc.salary.service.ImportService;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +20,7 @@ import java.util.List;
  * @date 2020/8/3 19:12
  */
 @Slf4j
-public class UploadDataListener extends AnalysisEventListener<UploadData> {
+public class UploadDataNotCheckListener extends AnalysisEventListener<UploadData> {
 
 
     private static final int BATCH_COUNT = 10;
@@ -29,7 +28,7 @@ public class UploadDataListener extends AnalysisEventListener<UploadData> {
 
     private final ImportService importService;
 
-    public UploadDataListener(ImportService importService) {
+    public UploadDataNotCheckListener(ImportService importService) {
         this.importService = importService;
     }
 
@@ -60,6 +59,6 @@ public class UploadDataListener extends AnalysisEventListener<UploadData> {
     private void saveData() {
         log.info("{}条数据，开始存储数据库！", list.size());
         log.info("存储数据库成功！");
-        importService.insertImport(list);
+        importService.insertImportNotCheck(list);
     }
 }

@@ -71,7 +71,7 @@ public class Employee implements Serializable {
     private LocalDateTime modifyTime;
 
     @ApiModelProperty(value = "表示员工的状态（0：离职，1：试用，2：在职）")
-    private Boolean status;
+    private Integer status;
 
 
 }

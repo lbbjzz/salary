@@ -4,6 +4,9 @@ package com.zsc.salary.controller;
 import com.zsc.salary.bean.GlobalResponse;
 import com.zsc.salary.model.pojo.Admin;
 import com.zsc.salary.service.AdminService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -24,6 +27,14 @@ import java.util.Map;
  * @author D
  * @since 2020-07-23
  */
+@ApiResponses({
+        @ApiResponse(code = 4000, message = "请求异常"),
+        @ApiResponse(code = 2000, message = "成功请求"),
+        @ApiResponse(code = 4001, message = "账号错误"),
+        @ApiResponse(code = 4002, message = "密码错误"),
+        @ApiResponse(code = 4003, message = "两次密码一致"),
+        @ApiResponse(code = 4004, message = "原始密码错误")
+})
 @RestController
 @Slf4j
 @RequestMapping("/admin")
@@ -32,6 +43,7 @@ public class AdminController {
     @Resource
     private AdminService adminService;
 
+    @ApiOperation(value = "登录")
     @PostMapping("/adminLogin")
     public GlobalResponse adminLogin (@RequestParam(value = "username", required = true) String username,
                                      @RequestParam(value = "password", required = true) String password) {
@@ -60,24 +72,28 @@ public class AdminController {
         }
     }
 
+    @ApiOperation(value = "修改密码")
     @PostMapping("/changePassword")
-    public GlobalResponse changePassword(String oldPassword, String password, String username) {
+    public GlobalResponse changePassword(@RequestParam(value = "oldPassword") String oldPassword,
+                                         @RequestParam(value = "password") String password,
+                                         @RequestParam(value = "username") String username) {
 
         if(password.equals(oldPassword)) {
-            return GlobalResponse.failed().code(4002).message("两次密码一致！");
+            return GlobalResponse.failed().code(4003).message("两次密码一致！");
         }
         Boolean isRight = adminService.judgePassword(oldPassword, username);
         if(!isRight) {
-            return GlobalResponse.failed().message("原始密码错误！");
+            return GlobalResponse.failed().code(4004).message("原始密码错误！");
         }
         int flag = adminService.updatePassword(password, username);
         if(flag == 1) {
             return GlobalResponse.success();
         }else {
-            return GlobalResponse.failed().code(4001);
+            return GlobalResponse.failed();
         }
     }
 
+    @ApiOperation(value = "登出")
     @GetMapping("/logOut")
     public GlobalResponse logOut(Integer userId) {
         adminService.logOut(userId);

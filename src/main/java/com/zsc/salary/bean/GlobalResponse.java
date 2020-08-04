@@ -1,6 +1,8 @@
 package com.zsc.salary.bean;
 
 import com.zsc.salary.enums.ResultCode;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,22 +20,27 @@ import java.util.Map;
  */
 @Data
 @NoArgsConstructor
+@ApiModel(description= "返回响应数据")
 public class GlobalResponse {
     /**
      * 响应是否成功
      */
+    @ApiModelProperty(value = "是否成功")
     private Boolean success;
     /**
      * 响应码
      */
+    @ApiModelProperty(value = "响应状态码")
     private Integer code;
     /**
      * 响应信息
      */
+    @ApiModelProperty(value = "响应信息")
     private String message;
     /**
      * 成功返回的数据
      */
+    @ApiModelProperty(value = "成功返回的数据")
     private Map<String, Object> data = new HashMap<>();
 
     public GlobalResponse(Boolean success, Integer code, String message) {
