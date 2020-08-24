@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zsc.salary.model.pojo.Employee;
 import com.zsc.salary.mapper.EmployeeMapper;
+import com.zsc.salary.model.vo.EmployeeVO;
 import com.zsc.salary.service.EmployeeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zsc.salary.utils.RedisUtil;
@@ -64,13 +65,14 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     }
 
     @Override
-    public Map<String, Object> listEmployee(Integer pageNo, Integer pageSize) {
+    public Map<String, Object> listEmployeeVO(Integer pageNo, Integer pageSize) {
         Map<String, Object> map = new HashMap<>(2);
         PageHelper.startPage(pageNo, pageSize);
-        List<Employee> list = employeeMapper.selectList(null);
-        PageInfo<Employee> pageInfo = new PageInfo<>(list);
+        List<EmployeeVO> list = employeeMapper.listEmployeeVO();
 
-        map.put("listEmployee", list);
+        PageInfo<EmployeeVO> pageInfo = new PageInfo<>(list);
+
+        map.put("listEmployeeVO", list);
         map.put("total", pageInfo.getTotal());
         return map;
     }

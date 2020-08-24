@@ -2,4 +2,36 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zsc.salary.mapper.EmployeeMapper">
 
+    <select id="listEmployeeVO" resultMap="EmployeeVO">
+        SELECT
+            e.id,
+            e.name employee_name,
+            d.name dept_name,
+            j.name job_name,
+            e.sex,
+            e.birth,
+            e.education,
+            e.id_card,
+            e.status
+        FROM
+            employee e,
+            job j,
+            dept d
+        WHERE
+            e.dept_id = d.id
+        AND
+            e.job_id = j.id
+    </select>
+
+    <resultMap id="EmployeeVO" type="com.zsc.salary.model.vo.EmployeeVO">
+        <id property="id" column="id"/>
+        <result property="employeeName" column="employee_name"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="jobName" column="job_name"/>
+        <result property="sex" column="sex"/>
+        <result property="birth" column="birth"/>
+        <result property="education" column="education"/>
+        <result property="idCard" column="id_card"/>
+        <result property="status" column="status"/>
+    </resultMap>
 </mapper>

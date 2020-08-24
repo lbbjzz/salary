@@ -43,9 +43,9 @@ public class EmployeeController {
     }
 
     @GetMapping("/listEmployee")
-    public GlobalResponse listEmployee(@RequestParam Integer pageNo,
+    public GlobalResponse listEmployeeVO(@RequestParam Integer pageNo,
                                        @RequestParam Integer pageSize) {
-        Map<String, Object> map = employeeService.listEmployee(pageNo, pageSize);
+        Map<String, Object> map = employeeService.listEmployeeVO(pageNo, pageSize);
         if (map.isEmpty()) {
             return GlobalResponse.failed().message("获取失败");
         }

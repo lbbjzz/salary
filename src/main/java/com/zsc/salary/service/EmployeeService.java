@@ -42,7 +42,7 @@ public interface EmployeeService extends IService<Employee> {
      * @param pageSize 分页的大小
      * @return 返回List<Employee>数据和total总个数
      */
-    Map<String, Object> listEmployee(Integer pageNo, Integer pageSize);
+    Map<String, Object> listEmployeeVO(Integer pageNo, Integer pageSize);
 
     /**
      * 根据员工id查询单个员工信息

@@ -39,7 +39,7 @@ class SalaryApplicationTests {
 
     @Test
     void select(){
-        System.out.println(employeeService.listEmployee(1, 2));
+        System.out.println(employeeService.listEmployeeVO(1, 2));
     }
 
     @Test
