@@ -34,7 +34,7 @@ public class Job implements Serializable {
 
     private static final long serialVersionUID=1L;
 
-    @ApiModelProperty(value = "岗位id")
+    @ApiModelProperty(value = "岗位id", hidden = true)
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
@@ -49,13 +49,14 @@ public class Job implements Serializable {
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @ApiModelProperty(value = "创建时间")
+    @ApiModelProperty(value = "创建时间", hidden = true)
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
+
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @ApiModelProperty(value = "修改时间")
+    @ApiModelProperty(value = "修改时间", hidden = true)
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime modifyTime;
 

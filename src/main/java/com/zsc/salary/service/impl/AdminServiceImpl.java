@@ -75,7 +75,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
 
     @Override
     public String createToken(Admin admin) {
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>(4);
         map.put("id", admin.getId());
         map.put("username", admin.getUsername());
         map.put("password", admin.getPassword());

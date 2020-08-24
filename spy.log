@@ -7,3 +7,5 @@
 1595409715005|11|statement|connection 0|url jdbc:p6spy:mysql://47.107.234.173/salary?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false|show full fields from `salary`|show full fields from `salary`
 1595493563873|32|statement|connection 0|url jdbc:p6spy:mysql://47.107.234.173/salary?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false|show table status WHERE 1=1  AND NAME IN ('admin')|show table status WHERE 1=1  AND NAME IN ('admin')
 1595493563907|11|statement|connection 0|url jdbc:p6spy:mysql://47.107.234.173/salary?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false|show full fields from `admin`|show full fields from `admin`
+1596532096800|31|statement|connection 0|url jdbc:p6spy:mysql://47.107.234.173/salary?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false|show table status WHERE 1=1  AND NAME IN ('admin')|show table status WHERE 1=1  AND NAME IN ('admin')
+1596532096836|13|statement|connection 0|url jdbc:p6spy:mysql://47.107.234.173/salary?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false|show full fields from `admin`|show full fields from `admin`
