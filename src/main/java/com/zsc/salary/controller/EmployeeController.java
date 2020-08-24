@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author D
@@ -25,8 +25,8 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @PostMapping("/insertEmployee")
-    public GlobalResponse insertEmployee(@RequestBody Employee employee){
-        if(null == employee){
+    public GlobalResponse insertEmployee(@RequestBody Employee employee) {
+        if (employee == null) {
             return GlobalResponse.failed().message("添加失败");
         }
         employeeService.insert(employee);
@@ -34,9 +34,9 @@ public class EmployeeController {
     }
 
     @GetMapping("/findById")
-    public GlobalResponse findById(Integer id){
+    public GlobalResponse findById(@RequestParam Integer id) {
         Employee employee = employeeService.findById(id);
-        if(null == employee){
+        if (employee == null) {
             return GlobalResponse.failed().message("获取失败");
         }
         return GlobalResponse.success().data("employee", employee).message("获取成功");
@@ -44,27 +44,30 @@ public class EmployeeController {
 
     @GetMapping("/listEmployee")
     public GlobalResponse listEmployee(@RequestParam Integer pageNo,
-                                       @RequestParam Integer pageSize){
+                                       @RequestParam Integer pageSize) {
         Map<String, Object> map = employeeService.listEmployee(pageNo, pageSize);
-        if(map.isEmpty()){
+        if (map.isEmpty()) {
             return GlobalResponse.failed().message("获取失败");
         }
         return GlobalResponse.success().data(map).message("获取成功");
     }
 
     @PostMapping("/updateEmployee")
-    public GlobalResponse updateEmployee(@RequestBody Employee employee){
-        int flag = employeeService.update(employee);
-        if(0 == flag){
+    public GlobalResponse updateEmployee(@RequestBody Employee employee) {
+        int flag = 0;
+        if (employee != null) {
+            flag = employeeService.update(employee);
+        }
+        if (flag == 0) {
             return GlobalResponse.failed().message("修改失败");
         }
         return GlobalResponse.success().message("修改成功");
     }
 
     @DeleteMapping("/deleteEmployee")
-    public GlobalResponse deleteEmployee(@RequestParam Integer id){
+    public GlobalResponse deleteEmployee(@RequestParam Integer id) {
         int flag = employeeService.deleteById(id);
-        if(0 == flag){
+        if (flag == 0) {
             return GlobalResponse.failed().message("删除失败");
         }
         return GlobalResponse.success().message("删除成功");

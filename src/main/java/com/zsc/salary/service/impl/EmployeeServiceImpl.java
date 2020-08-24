@@ -18,7 +18,7 @@ import java.util.Map;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author D
@@ -40,31 +40,31 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     private final String employeeKey = "employee:";
 
     @Override
-    public void insert(Employee employee){
+    public void insert(Employee employee) {
         employeeMapper.insert(employee);
     }
 
     @Override
-    public int deleteById(Integer id){
+    public int deleteById(Integer id) {
         String key = employeeKey + id;
-        if(redisUtil.hasKey(key)){
+        if (redisUtil.hasKey(key)) {
             redisUtil.del(key);
         }
         return employeeMapper.deleteById(id);
     }
 
     @Override
-    public int update(Employee employee){
+    public int update(Employee employee) {
         String key = employeeKey + employee.getId();
         int flag = employeeMapper.updateById(employee);
-        if(redisUtil.hasKey(key)){
+        if (redisUtil.hasKey(key)) {
             redisUtil.set(key, employee, 24);
         }
         return flag;
     }
 
     @Override
-    public Map<String, Object> listEmployee(Integer pageNo, Integer pageSize){
+    public Map<String, Object> listEmployee(Integer pageNo, Integer pageSize) {
         Map<String, Object> map = new HashMap<>(2);
         PageHelper.startPage(pageNo, pageSize);
         List<Employee> list = employeeMapper.selectList(null);
@@ -79,11 +79,11 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     public Employee findById(Integer id) {
         String key = employeeKey + id;
         Employee employee;
-        if(redisUtil.hasKey(key)){
+        if (redisUtil.hasKey(key)) {
             employee = (Employee) redisUtil.get(key);
         } else {
             employee = employeeMapper.selectById(id);
-            if(null != employee){
+            if (employee != null) {
                 redisUtil.set(key, employee, 24);
             }
         }
