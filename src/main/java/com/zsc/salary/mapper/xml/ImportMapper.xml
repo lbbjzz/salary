@@ -29,7 +29,8 @@
             i.personal_leave_day,
             i.late_day,
             i.overtime_day,
-            i.back_pay
+            i.back_pay,
+            i.create_time
         FROM
             import i,
             employee e,
@@ -55,5 +56,6 @@
         <result property="lateDay" column="late_day"/>
         <result property="overtimeDay" column="overtime_day"/>
         <result property="backPay" column="back_pay"/>
+        <result property="createTime" column="create_time"/>
     </resultMap>
 </mapper>
