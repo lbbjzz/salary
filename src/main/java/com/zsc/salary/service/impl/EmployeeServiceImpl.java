@@ -2,6 +2,7 @@ package com.zsc.salary.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.zsc.salary.model.dto.EmployeeDTO;
 import com.zsc.salary.model.pojo.Employee;
 import com.zsc.salary.mapper.EmployeeMapper;
 import com.zsc.salary.model.vo.EmployeeVO;
@@ -9,7 +10,6 @@ import com.zsc.salary.service.EmployeeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zsc.salary.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -65,13 +65,23 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     }
 
     @Override
-    public Map<String, Object> listEmployeeVO(Integer pageNo, Integer pageSize) {
-        Map<String, Object> map = new HashMap<>(2);
-        PageHelper.startPage(pageNo, pageSize);
-        List<EmployeeVO> list = employeeMapper.listEmployeeVO();
+    public Map<String, Object> listEmployeeVO(EmployeeDTO employeeDTO) {
+        Map<String, Object> queryMap = new HashMap<>(5);
+        if (employeeDTO.getDeptId() != null) {
+            queryMap.put("deptId", employeeDTO.getDeptId());
+        }
+        if (employeeDTO.getJobId() != null) {
+            queryMap.put("jobId", employeeDTO.getJobId());
+        }
+        if (!employeeDTO.getEmployeeName().isEmpty() && employeeDTO.getEmployeeName() != null) {
+            queryMap.put("employeeName", employeeDTO.getEmployeeName());
+        }
+        PageHelper.startPage(employeeDTO.getPageNo(), employeeDTO.getPageSize());
+        List<EmployeeVO> list = employeeMapper.listEmployeeVO(queryMap);
 
         PageInfo<EmployeeVO> pageInfo = new PageInfo<>(list);
 
+        Map<String, Object> map = new HashMap<>(2);
         map.put("listEmployeeVO", list);
         map.put("total", pageInfo.getTotal());
         return map;
@@ -91,4 +101,5 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         }
         return employee;
     }
+
 }

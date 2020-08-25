@@ -38,11 +38,6 @@ class SalaryApplicationTests {
     }
 
     @Test
-    void select(){
-        System.out.println(employeeService.listEmployeeVO(1, 2));
-    }
-
-    @Test
     void update(){
         Employee employee = new Employee();
         employee.setId(4);
@@ -50,4 +45,5 @@ class SalaryApplicationTests {
         employee.setSex(true);
         System.out.println(employeeService.update(employee));
     }
+
 }

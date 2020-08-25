@@ -2,8 +2,10 @@ package com.zsc.salary.controller;
 
 
 import com.zsc.salary.bean.GlobalResponse;
+import com.zsc.salary.model.dto.EmployeeDTO;
 import com.zsc.salary.model.pojo.Employee;
 import com.zsc.salary.service.EmployeeService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -19,6 +21,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/employee")
+@Slf4j
 public class EmployeeController {
 
     @Resource
@@ -43,9 +46,10 @@ public class EmployeeController {
     }
 
     @GetMapping("/listEmployee")
-    public GlobalResponse listEmployeeVO(@RequestParam Integer pageNo,
-                                       @RequestParam Integer pageSize) {
-        Map<String, Object> map = employeeService.listEmployeeVO(pageNo, pageSize);
+    public GlobalResponse listEmployeeVO(EmployeeDTO employeeDTO) {
+        log.info(String.valueOf(employeeDTO));
+        System.out.println(employeeDTO);
+        Map<String, Object> map = employeeService.listEmployeeVO(employeeDTO);
         if (map.isEmpty()) {
             return GlobalResponse.failed().message("获取失败");
         }

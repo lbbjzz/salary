@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.zsc.salary.model.vo.EmployeeVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -16,9 +17,7 @@ import java.util.List;
  */
 public interface EmployeeMapper extends BaseMapper<Employee> {
 
-    /**
-     * 返回Employee显示的数据
-     * @return List<EmployeeVo>数据
-     */
-    List<EmployeeVO> listEmployeeVO();
+    List<EmployeeVO> listEmployeeVO(Map<String, Object> map);
+
+
 }
