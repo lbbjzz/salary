@@ -33,15 +33,14 @@ public interface EmployeeService extends IService<Employee> {
     /**
      * 更新员工的信息
      * @param employee 要更新的员工信息
-     * @return 返回更新结果，0为更新失败，1为更新成功
+     * @return 返回更新结果，-2为岗位超过核定人数，-1为要修改的部门或岗位不存在，0为更新失败，1为更新成功
      */
     int update(Employee employee);
 
     /**
-     * 分页查询员工信息
-     * @param pageNo 分页的当前页数
-     * @param pageSize 分页的大小
-     * @return 返回List<Employee>数据和total总个数
+     * 多表查询返回员工的具体信息，可根据查询条件查询
+     * @param employeeDTO 查询条件DTO
+     * @return 返回employeeVO数据和total总个数
      */
     Map<String, Object> listEmployeeVO(EmployeeDTO employeeDTO);
 

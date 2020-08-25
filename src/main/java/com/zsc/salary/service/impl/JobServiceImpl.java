@@ -54,5 +54,9 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
         return jobMapper.insert(job);
     }
 
+    @Override
+    public Job findById(Integer id){
+        return jobMapper.selectById(id);
+    }
 
 }

@@ -27,7 +27,11 @@ public interface EmployeeMapper extends BaseMapper<Employee> {
     @Select("SELECT salary FROM employee e,job j WHERE e.job_id = j.id AND e.id = #{employeeId}")
     BigDecimal getEmployeeSalary(Integer employeeId);
 
-
+    /**
+     * 多表查询返回员工的具体信息，可根据查询条件查询
+     * @param map 查询条件map集合
+     * @return 符合查询条件的EmployeeVO数据
+     */
     List<EmployeeVO> listEmployeeVO(Map<String, Object> map);
 
 

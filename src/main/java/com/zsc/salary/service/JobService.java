@@ -42,5 +42,11 @@ public interface JobService extends IService<Job> {
      */
     int insertJob(Job job);
 
+    /**
+     * 根据id查询
+     * @param id 要查询的职位id
+     * @return 查询得到的job数据
+     */
+    Job findById(Integer id);
 
 }

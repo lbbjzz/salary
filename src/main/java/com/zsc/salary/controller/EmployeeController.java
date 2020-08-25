@@ -65,6 +65,12 @@ public class EmployeeController {
         if (flag == 0) {
             return GlobalResponse.failed().message("修改失败");
         }
+        if (flag == -1) {
+            return GlobalResponse.failed().message("该部门或岗位不存在");
+        }
+        if (flag == -2) {
+            return GlobalResponse.failed().message("超过岗位核定人数");
+        }
         return GlobalResponse.success().message("修改成功");
     }
 

@@ -2,12 +2,17 @@ package com.zsc.salary.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.zsc.salary.mapper.JobMapper;
 import com.zsc.salary.model.dto.EmployeeDTO;
+import com.zsc.salary.model.pojo.Dept;
 import com.zsc.salary.model.pojo.Employee;
 import com.zsc.salary.mapper.EmployeeMapper;
+import com.zsc.salary.model.pojo.Job;
 import com.zsc.salary.model.vo.EmployeeVO;
+import com.zsc.salary.service.DeptService;
 import com.zsc.salary.service.EmployeeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zsc.salary.service.JobService;
 import com.zsc.salary.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,6 +36,12 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
 
     @Resource
     private EmployeeMapper employeeMapper;
+
+    @Resource
+    private JobService jobService;
+
+    @Resource
+    private DeptService deptService;
 
     @Resource
     private RedisUtil redisUtil;
@@ -57,7 +68,31 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     @Override
     public int update(Employee employee) {
         String key = employeeKey + employee.getId();
-        int flag = employeeMapper.updateById(employee);
+        int flag;
+        Job  job = jobService.findById(employee.getJobId());
+        Dept dept = deptService.findById(employee.getDeptId());
+
+        System.out.println("wwwwww" + dept);
+        if(job == null || dept == null){
+            flag = -1;
+            return flag;
+        }
+
+        EmployeeDTO employeeDTO = new EmployeeDTO();
+        employeeDTO.setPageNo(-1);
+        employeeDTO.setPageSize(-1);
+        employeeDTO.setJobId(job.getId());
+        employeeDTO.setEmployeeName("");
+
+        Map<String, Object> map = this.listEmployeeVO(employeeDTO);
+        long total = (long)map.get("total");
+
+        if(total == job.getApprovedNum()){
+            flag = -2;
+            return flag;
+        }
+
+        flag = employeeMapper.updateById(employee);
         if (redisUtil.hasKey(key)) {
             redisUtil.set(key, employee, 24);
         }
@@ -76,7 +111,10 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         if (!employeeDTO.getEmployeeName().isEmpty() && employeeDTO.getEmployeeName() != null) {
             queryMap.put("employeeName", employeeDTO.getEmployeeName());
         }
-        PageHelper.startPage(employeeDTO.getPageNo(), employeeDTO.getPageSize());
+
+        if(employeeDTO.getPageNo() >= 0 && employeeDTO.getPageSize() >= 0){
+            PageHelper.startPage(employeeDTO.getPageNo(), employeeDTO.getPageSize());
+        }
         List<EmployeeVO> list = employeeMapper.listEmployeeVO(queryMap);
 
         PageInfo<EmployeeVO> pageInfo = new PageInfo<>(list);
