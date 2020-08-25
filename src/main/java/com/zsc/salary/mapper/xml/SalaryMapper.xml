@@ -2,4 +2,50 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zsc.salary.mapper.SalaryMapper">
 
+    <select id="listSalaryVo" resultMap="salaryVo">
+        SELECT
+            s.*,
+            e.name employee_name,
+            j.id job_id,
+            j.name job_name,
+            d.id dept_id,
+            d.name dept_name
+        FROM
+            salary s,
+            employee e,
+            job j,
+            dept d
+        WHERE
+            s.employee_id = e.id
+          AND e.job_id = j.id
+          AND e.dept_id = d.id
+    </select>
+
+    <resultMap id="salaryVo" type="com.zsc.salary.model.vo.SalaryVo">
+        <id property="id" column="id"/>
+        <result property="employeeId" column="employee_id"/>
+        <result property="employeeName" column="employee_name"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="jobId" column="job_id"/>
+        <result property="jobName" column="job_name"/>
+        <result property="basicSalary" column="basic_salary"/>
+        <result property="personalEndowmentInsurance" column="personal_endowment_insurance"/>
+        <result property="companyEndowmentInsurance" column="company_endowment_insurance"/>
+        <result property="personalUnemploymentInsurance" column="personal_unemployment_insurance"/>
+        <result property="personalAccumulationFund" column="personal_accumulation_fund"/>
+        <result property="companyAccumulationFund" column="company_accumulation_fund"/>
+        <result property="personalMedicalInsurance" column="personal_medical_insurance"/>
+        <result property="companyMedicalInsurance" column="company_medical_insurance"/>
+        <result property="personalIncomeTax" column="personal_income_tax"/>
+        <result property="sickLeaveDeduction" column="sick_leave_deduction"/>
+        <result property="personalLeaveDeduction" column="personal_leave_deduction"/>
+        <result property="lateDeduction" column="late_deduction"/>
+        <result property="overtimePay" column="overtime_pay"/>
+        <result property="backPay" column="back_pay"/>
+        <result property="netPay" column="net_pay"/>
+        <result property="shouldPay" column="should_pay"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
 </mapper>

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zsc.salary.mapper.EmployeeMapper">
 
-    <select id="listEmployeeVO" resultMap="EmployeeVO">
+    <select id="listEmployeeVO" resultMap="EmployeeVO" parameterType="Map">
         SELECT
             e.id,
             e.name employee_name,
@@ -21,6 +21,17 @@
             e.dept_id = d.id
         AND
             e.job_id = j.id
+        <choose>
+            <when test="deptId != null">
+                AND e.dept_id = #{deptId}
+            </when>
+            <when test="jobId != null">
+                AND e.job_id = #{jobId}
+            </when>
+            <when test="employeeName != null">
+                AND e.name like CONCAT('%',#{employeeName},'%')
+            </when>
+        </choose>
     </select>
 
     <resultMap id="EmployeeVO" type="com.zsc.salary.model.vo.EmployeeVO">

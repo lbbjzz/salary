@@ -1,15 +1,9 @@
-package com.zsc.salary.model.pojo;
+package com.zsc.salary.model.vo;
 
-import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.IdType;
-
-import java.time.LocalDateTime;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
-
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -17,24 +11,22 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
- * @author D
- * @since 2020-07-22
+ * @author: D
+ * @since: 2020/8/25
+ * @version: 1
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
-@ApiModel(value="Salary对象", description="")
-public class Salary implements Serializable {
-
-    private static final long serialVersionUID=1L;
+@ApiModel(value = "封装员工工资信息的实体类")
+public class SalaryVo {
 
     @ApiModelProperty(value = "工资Id")
     @TableId(value = "id", type = IdType.AUTO)
@@ -42,6 +34,21 @@ public class Salary implements Serializable {
 
     @ApiModelProperty(value = "员工ID")
     private Integer employeeId;
+
+    @ApiModelProperty(value = "员工姓名")
+    private String employeeName;
+
+    @ApiModelProperty(value = "员工部门ID")
+    private Integer deptId;
+
+    @ApiModelProperty(value = "员工部门")
+    private String deptName;
+
+    @ApiModelProperty(value = "员工岗位ID")
+    private Integer jobId;
+
+    @ApiModelProperty(value = "员工岗位")
+    private String jobName;
 
     @ApiModelProperty(value = "基本工资")
     private BigDecimal basicSalary;
@@ -102,31 +109,4 @@ public class Salary implements Serializable {
     @ApiModelProperty(value = "修改时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime modifyTime;
-
-    public Salary(Integer employeeId, BigDecimal basicSalary, BigDecimal personalEndowmentInsurance,
-                  BigDecimal companyEndowmentInsurance, BigDecimal personalUnemploymentInsurance,
-                  BigDecimal personalAccumulationFund, BigDecimal companyAccumulationFund,
-                  BigDecimal personalMedicalInsurance, BigDecimal companyMedicalInsurance,
-                  BigDecimal personalIncomeTax, BigDecimal sickLeaveDeduction,
-                  BigDecimal personalLeaveDeduction, BigDecimal lateDeduction,
-                  BigDecimal overtimePay, BigDecimal backPay, BigDecimal netPay,
-                  BigDecimal shouldPay) {
-        this.employeeId = employeeId;
-        this.basicSalary = basicSalary;
-        this.personalEndowmentInsurance = personalEndowmentInsurance;
-        this.companyEndowmentInsurance = companyEndowmentInsurance;
-        this.personalUnemploymentInsurance = personalUnemploymentInsurance;
-        this.personalAccumulationFund = personalAccumulationFund;
-        this.companyAccumulationFund = companyAccumulationFund;
-        this.personalMedicalInsurance = personalMedicalInsurance;
-        this.companyMedicalInsurance = companyMedicalInsurance;
-        this.personalIncomeTax = personalIncomeTax;
-        this.sickLeaveDeduction = sickLeaveDeduction;
-        this.personalLeaveDeduction = personalLeaveDeduction;
-        this.lateDeduction = lateDeduction;
-        this.overtimePay = overtimePay;
-        this.backPay = backPay;
-        this.netPay = netPay;
-        this.shouldPay = shouldPay;
-    }
 }

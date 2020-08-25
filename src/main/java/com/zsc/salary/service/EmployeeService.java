@@ -1,5 +1,6 @@
 package com.zsc.salary.service;
 
+import com.zsc.salary.model.dto.EmployeeDTO;
 import com.zsc.salary.model.pojo.Employee;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -42,7 +43,7 @@ public interface EmployeeService extends IService<Employee> {
      * @param pageSize 分页的大小
      * @return 返回List<Employee>数据和total总个数
      */
-    Map<String, Object> listEmployeeVO(Integer pageNo, Integer pageSize);
+    Map<String, Object> listEmployeeVO(EmployeeDTO employeeDTO);
 
     /**
      * 根据员工id查询单个员工信息
@@ -50,4 +51,6 @@ public interface EmployeeService extends IService<Employee> {
      * @return Employee员工数据
      */
     Employee findById(Integer id);
+
+
 }
