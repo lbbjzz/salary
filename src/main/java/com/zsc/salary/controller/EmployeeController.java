@@ -51,6 +51,12 @@ public class EmployeeController {
     @ApiOperation(value = "根据条件分页查询员工信息")
     @GetMapping("/listEmployeeVO")
     public GlobalResponse listEmployeeVO(EmployeeDTO employeeDTO) {
+        if (employeeDTO.getPageNo() == null) {
+            employeeDTO.setPageNo(1);
+        }
+        if (employeeDTO.getPageSize() == null) {
+            employeeDTO.setPageSize(5);
+        }
         Map<String, Object> map = employeeService.listEmployeeVO(employeeDTO);
         if (map.isEmpty()) {
             return GlobalResponse.failed().message("获取失败");

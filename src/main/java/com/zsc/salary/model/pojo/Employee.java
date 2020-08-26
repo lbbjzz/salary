@@ -60,17 +60,17 @@ public class Employee implements Serializable {
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @ApiModelProperty(value = "创建时间")
+    @ApiModelProperty(value = "创建时间", hidden = true)
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @ApiModelProperty(value = "修改时间")
+    @ApiModelProperty(value = "修改时间", hidden = true)
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime modifyTime;
 
-    @ApiModelProperty(value = "表示员工的状态（0：离职，1：试用，2：在职）")
+    @ApiModelProperty(value = "表示员工的状态（0：离职，1：试用，2：在职）", hidden = true)
     private Integer status;
 
 

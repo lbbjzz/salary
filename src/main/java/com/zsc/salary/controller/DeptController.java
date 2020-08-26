@@ -4,6 +4,8 @@ package com.zsc.salary.controller;
 import com.zsc.salary.bean.GlobalResponse;
 import com.zsc.salary.model.pojo.Dept;
 import com.zsc.salary.service.DeptService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
