@@ -80,14 +80,6 @@ public class ImportServiceImpl extends ServiceImpl<ImportMapper, Import> impleme
     public int updateImport(ImportDto importDto) {
 
         Import imports = dozerMapper.map(importDto, Import.class);
-
-        Employee employee = employeeMapper.selectOne(new QueryWrapper<Employee>()
-                .select("id")
-                .eq("id", imports.getEmployeeId()));
-        //修改后的用户不存在
-        if(employee == null) {
-            return -1;
-        }
         int update = importMapper.updateById(imports);
         if(update == 0) {
             return 0;
@@ -101,11 +93,13 @@ public class ImportServiceImpl extends ServiceImpl<ImportMapper, Import> impleme
     }
 
     @Override
-    public Map<String, Object> listImportVo(Integer pageNo, Integer pageSize) {
+    public Map<String, Object> listImportVo(Integer pageNo, Integer pageSize, String time) {
 
+        Map<String, Object> queryMap = new HashMap<>(1);
+        queryMap.put("time", time);
         Map<String, Object> map = new HashMap<>(2);
         PageHelper.startPage(pageNo, pageSize);
-        List<ImportVo> list = importMapper.listImportVo();
+        List<ImportVo> list = importMapper.listImportVo(queryMap);
 
         PageInfo<ImportVo> page = new PageInfo<> (list);
 

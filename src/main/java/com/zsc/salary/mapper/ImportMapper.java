@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.zsc.salary.model.vo.ImportVo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -25,7 +26,8 @@ public interface ImportMapper extends BaseMapper<Import> {
 
     /**
      * 获取Import显示的数据
+     * @param map 查询条件
      * @return Import显示的数据
      */
-    List<ImportVo> listImportVo();
+    List<ImportVo> listImportVo(Map<String, Object> map);
 }

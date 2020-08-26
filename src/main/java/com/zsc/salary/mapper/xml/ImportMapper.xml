@@ -19,7 +19,7 @@
         </foreach>
     </insert>
 
-    <select id="listImportVo" resultMap="importVo">
+    <select id="listImportVo" resultMap="importVo" parameterType="Map">
         SELECT
             i.id,
             e.name employee_name,
@@ -44,6 +44,11 @@
             e.job_id = j.id
           AND
             e.status != 0
+        <choose>
+            <when test="time == 'now'">
+                AND to_days(i.create_time) = to_days(now())
+            </when>
+        </choose>
     </select>
     
     <resultMap id="importVo" type="com.zsc.salary.model.vo.ImportVo">

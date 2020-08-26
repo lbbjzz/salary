@@ -33,7 +33,7 @@ public interface ImportService extends IService<Import> {
     /**
      * 修改导入的数据
      * @param importDto 导入数据的封装
-     * @return 影响行数，0则修改失败，-1则修改的用户不存在 1为成功
+     * @return 影响行数，0则修改失败  1为成功
      */
     int updateImport(ImportDto importDto);
 
@@ -48,8 +48,9 @@ public interface ImportService extends IService<Import> {
      *  分页获取导入的数据
      * @param pageNo 页码
      * @param pageSize 每页展示数据量
+     * @param time 查询的时间范围
      * @return List<ImportVo>数据 和 total 总数据
      */
-    Map<String, Object> listImportVo(Integer pageNo, Integer pageSize);
+    Map<String, Object> listImportVo(Integer pageNo, Integer pageSize, String time);
 
 }

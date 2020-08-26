@@ -8,9 +8,7 @@ import com.zsc.salary.listener.UploadDataNotCheckListener;
 import com.zsc.salary.model.data.UploadData;
 import com.zsc.salary.model.dto.ImportDto;
 import com.zsc.salary.service.ImportService;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -39,7 +37,7 @@ public class ImportController {
     private ImportService importService;
 
     @ApiOperation(value = "excel导入数据, 会确认用户是否存在", notes = "推荐使用这个方法")
-    @PutMapping("/uploadData")
+    @PostMapping("/uploadData")
     public GlobalResponse uploadData(MultipartFile file) {
         if(file.isEmpty()) {
             return GlobalResponse.failed();
@@ -53,7 +51,7 @@ public class ImportController {
     }
 
     @ApiOperation(value = "excel导入数据,不会进一步确认用户是否存在", notes = "不推荐使用这个方法，除非确保导入的用户一定存在")
-    @PutMapping("/uploadDataNotCheck")
+    @PostMapping("/uploadDataNotCheck")
     public GlobalResponse uploadDataNotCheck(MultipartFile file) {
         if(file.isEmpty()) {
             return GlobalResponse.failed();
@@ -68,16 +66,12 @@ public class ImportController {
 
     @ApiResponses({
             @ApiResponse(code = 4000, message = "请求异常"),
-            @ApiResponse(code = 2000, message = "成功请求"),
-            @ApiResponse(code = 4001, message = "修改失败，用户不存在！")
+            @ApiResponse(code = 2000, message = "成功请求")
     })
     @ApiOperation(value = "修改导入的数据", notes = "修改导入的数据，ID不能为空")
     @PostMapping("/updateImport")
-    public GlobalResponse updateImport(ImportDto importDto) {
+    public GlobalResponse updateImport(@RequestBody ImportDto importDto) {
         int flag = importService.updateImport(importDto);
-        if (flag == -1) {
-            return GlobalResponse.failed().code(4001).message("修改失败，用户不存在！");
-        }
         if (flag == 0) {
             return GlobalResponse.failed().message("修改失败！");
         }
@@ -94,11 +88,15 @@ public class ImportController {
         return GlobalResponse.success().message("修改成功！");
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "time", value = "查询时间范围，now 表示今天的数据 month表示一月之内的数据",defaultValue = "now" ,required = true, dataType = "String", paramType = "path")
+    })
     @ApiOperation(value = "查询数据", notes = "包含listImportVo数据， total全部的总数量")
-    @GetMapping("/listImportVo")
-    public GlobalResponse listImportVo(@RequestParam(value = "pageNo") Integer pageNo,
-                                       @RequestParam(value = "pageSize") Integer pageSize) {
-        Map<String, Object> map  = importService.listImportVo(pageNo, pageSize);
+    @GetMapping("/listImportVo/{pageNo}/{pageSize}/{time}")
+    public GlobalResponse listImportVo(@PathVariable(value = "pageNo") Integer pageNo,
+                                       @PathVariable(value = "pageSize") Integer pageSize,
+                                       @PathVariable(value = "time") String time) {
+        Map<String, Object> map  = importService.listImportVo(pageNo, pageSize, time);
         if (map.isEmpty()) {
             return GlobalResponse.failed().message("获取失败");
         }
