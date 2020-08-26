@@ -79,8 +79,8 @@ public class ImportController {
     }
 
     @ApiOperation(value = "删除导入的数据")
-    @DeleteMapping("/deleteImport")
-    public GlobalResponse deleteImport(@RequestParam(value = "importId") Integer importId) {
+    @PostMapping("/deleteImport")
+    public GlobalResponse deleteImport(Integer importId) {
         int flag = importService.deleteImport(importId);
         if (flag == 0) {
             return GlobalResponse.failed().message("删除失败！");
