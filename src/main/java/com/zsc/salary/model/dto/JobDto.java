@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -35,4 +36,5 @@ public class JobDto implements Serializable {
 
     @ApiModelProperty(value = "岗位底薪", required = true)
     private BigDecimal salary;
+
 }

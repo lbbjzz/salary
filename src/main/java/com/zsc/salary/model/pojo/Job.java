@@ -47,6 +47,9 @@ public class Job implements Serializable {
     @ApiModelProperty(value = "岗位底薪")
     private BigDecimal salary;
 
+    @ApiModelProperty(value = "逻辑删除")
+    private boolean deleted;
+
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @ApiModelProperty(value = "创建时间", hidden = true)

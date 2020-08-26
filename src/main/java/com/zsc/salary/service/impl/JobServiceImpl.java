@@ -2,9 +2,12 @@ package com.zsc.salary.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.zsc.salary.model.dto.EmployeeDTO;
 import com.zsc.salary.model.dto.JobDto;
 import com.zsc.salary.model.pojo.Job;
 import com.zsc.salary.mapper.JobMapper;
+import com.zsc.salary.model.vo.EmployeeVO;
+import com.zsc.salary.service.EmployeeService;
 import com.zsc.salary.service.JobService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.dozer.Mapper;
@@ -17,7 +20,7 @@ import java.util.Map;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author D
@@ -28,6 +31,9 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
 
     @Resource
     JobMapper jobMapper;
+
+    @Resource
+    private EmployeeService employeeService;
 
     @Resource
     private Mapper dozerMapper;
@@ -55,8 +61,22 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
     }
 
     @Override
-    public Job findById(Integer id){
+    public Job findById(Integer id) {
         return jobMapper.selectById(id);
     }
 
+    @Override
+    public int deleteById(Integer id) {
+        int flag;
+        EmployeeDTO employeeDTO = new EmployeeDTO(-1, -1, null, id, null);
+        Map<String, Object> map = employeeService.listEmployeeVO(employeeDTO);
+
+        if ((long) map.get("total") > 0) {
+            flag = -1;
+            return flag;
+        }
+
+        flag = jobMapper.deleteById(id);
+        return flag;
+    }
 }

@@ -2,10 +2,13 @@ package com.zsc.salary.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.zsc.salary.model.dto.EmployeeDTO;
 import com.zsc.salary.model.pojo.Dept;
 import com.zsc.salary.mapper.DeptMapper;
+import com.zsc.salary.model.vo.EmployeeVO;
 import com.zsc.salary.service.DeptService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zsc.salary.service.EmployeeService;
 import com.zsc.salary.utils.RedisUtil;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +32,9 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
     private DeptMapper deptMapper;
 
     @Resource
+    private EmployeeService employeeService;
+
+    @Resource
     private RedisUtil redisUtil;
 
     private final String DEPT_KEY = "dept:";
@@ -41,10 +47,20 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
     @Override
     public int deleteById(Integer id) {
         String key = DEPT_KEY + id;
+        EmployeeDTO employeeDTO = new EmployeeDTO(-1, -1, id, null, null);
+        Map<String, Object> map = employeeService.listEmployeeVO(employeeDTO);
+        int flag;
+
+        if((long)map.get("total") > 0){
+            flag = -1;
+            return flag;
+        }
+
         if (redisUtil.hasKey(key)) {
             redisUtil.del(key);
         }
-        return deptMapper.deleteById(id);
+        flag = deptMapper.deleteById(id);
+        return flag;
     }
 
     @Override

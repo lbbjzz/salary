@@ -5,6 +5,8 @@ import com.zsc.salary.bean.GlobalResponse;
 import com.zsc.salary.model.dto.JobDto;
 import com.zsc.salary.model.pojo.Job;
 import com.zsc.salary.service.JobService;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.models.auth.In;
@@ -15,7 +17,7 @@ import java.util.Map;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author D
@@ -32,6 +34,7 @@ public class JobController {
     @Resource
     JobService jobService;
 
+    @ApiOperation(value = "新增职位信息")
     @PutMapping("/insertJob")
     public GlobalResponse insertJob(@RequestBody Job job) {
         if (job == null) {
@@ -46,6 +49,7 @@ public class JobController {
         return GlobalResponse.failed().message("插入失败");
     }
 
+    @ApiOperation(value = "更新职位信息")
     @PostMapping("/updateJob")
     public GlobalResponse updateJob(@RequestBody JobDto jobDto) {
         if (jobDto == null) {
@@ -60,6 +64,7 @@ public class JobController {
         return GlobalResponse.failed().message("更新失败");
     }
 
+    @ApiOperation(value = "查询职位信息")
     @GetMapping("/listJob/{pageNo}/{pageSize}")
     public GlobalResponse listJob(@PathVariable(value = "pageNo") Integer pageNo,
                                   @PathVariable("pageSize") Integer pageSize) {
@@ -75,6 +80,18 @@ public class JobController {
         return GlobalResponse.success().data(map);
     }
 
+    @ApiOperation(value = "删除职位信息", notes = "逻辑删除")
+    @PostMapping("/deleteById")
+    public GlobalResponse deleteById(@RequestParam Integer id) {
+        int flag = jobService.deleteById(id);
+        if (flag == -1) {
+            return GlobalResponse.failed().message("该职位还有员工，删除失败");
+        }
+        if(flag == 0){
+            return GlobalResponse.failed().message("删除失败");
+        }
+        return GlobalResponse.success().message("删除成功");
+    }
 
 }
 

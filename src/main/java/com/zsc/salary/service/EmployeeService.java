@@ -24,13 +24,6 @@ public interface EmployeeService extends IService<Employee> {
     void insert(Employee employee);
 
     /**
-     * 根据id删除员工信息
-     * @param id 要删除的员工id
-     * @return 返回删除结果，0为删除失败，1为删除成功
-     */
-    int deleteById(Integer id);
-
-    /**
      * 更新员工的信息
      * @param employee 要更新的员工信息
      * @return 返回更新结果，-2为岗位超过核定人数，-1为要修改的部门或岗位不存在，0为更新失败，1为更新成功

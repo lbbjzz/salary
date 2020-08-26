@@ -77,14 +77,5 @@ public class EmployeeController {
         return GlobalResponse.success().message("修改成功");
     }
 
-    @ApiOperation(value = "删除员工信息")
-    @DeleteMapping("/deleteEmployee")
-    public GlobalResponse deleteEmployee(@RequestParam Integer id) {
-        int flag = employeeService.deleteById(id);
-        if (flag == 0) {
-            return GlobalResponse.failed().message("删除失败");
-        }
-        return GlobalResponse.success().message("删除成功");
-    }
 }
 

@@ -57,15 +57,6 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     }
 
     @Override
-    public int deleteById(Integer id) {
-        String key = employeeKey + id;
-        if (redisUtil.hasKey(key)) {
-            redisUtil.del(key);
-        }
-        return employeeMapper.deleteById(id);
-    }
-
-    @Override
     public int update(Employee employee) {
         String key = employeeKey + employee.getId();
         int flag;
@@ -77,11 +68,7 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
             return flag;
         }
 
-        EmployeeDTO employeeDTO = new EmployeeDTO();
-        employeeDTO.setPageNo(-1);
-        employeeDTO.setPageSize(-1);
-        employeeDTO.setJobId(job.getId());
-        employeeDTO.setEmployeeName("");
+        EmployeeDTO employeeDTO = new EmployeeDTO(-1, -1,  null, job.getId(), "");
 
         Map<String, Object> map = this.listEmployeeVO(employeeDTO);
         long total = (long)map.get("total");
@@ -107,7 +94,7 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         if (employeeDTO.getJobId() != null) {
             queryMap.put("jobId", employeeDTO.getJobId());
         }
-        if (!employeeDTO.getEmployeeName().isEmpty() || employeeDTO.getEmployeeName() != null) {
+        if (employeeDTO.getEmployeeName() != null && !employeeDTO.getEmployeeName().isEmpty()) {
             queryMap.put("employeeName", employeeDTO.getEmployeeName());
         }
 

@@ -39,6 +39,9 @@ public class DeptController {
     @DeleteMapping("/deleteDept")
     public GlobalResponse deleteDept(@RequestParam Integer id) {
         int flag = deptService.deleteById(id);
+        if (flag == -1){
+            return GlobalResponse.failed().message("还有员工在该部门，删除失败");
+        }
         if (flag == 0) {
             return GlobalResponse.failed().message("删除失败");
         }

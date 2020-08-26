@@ -24,7 +24,7 @@ public interface DeptService extends IService<Dept> {
     /**
      * 根据id删除部门信息
      * @param id 要删除的部门id
-     * @return 返回删除结果，0为删除失败，1为删除成功
+     * @return 返回删除结果，-1为还存在员工，0为删除失败，1为删除成功
      */
     int deleteById(Integer id);
 

@@ -49,4 +49,10 @@ public interface JobService extends IService<Job> {
      */
     Job findById(Integer id);
 
+    /**
+     * 根据id逻辑删除职位
+     * @param id 要删除的职位id
+     * @return 返回结果，-1为该职位还有员工，0为删除失败，1为删除成功
+     */
+    int deleteById(Integer id);
 }

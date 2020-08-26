@@ -6,11 +6,11 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- *@ClassName EmployeeDTO
- *@Description TODO
- *@Author Kami
- *@Date 2020/8/24 16:37
- *@Version 1.0
+ *@className EmployeeDTO
+ *@description TODO
+ *@author Kami
+ *@date 2020/8/24 16:37
+ *@version 1.0
  */
 @Data
 @ApiModel(value = "employee查询输入的条件")
@@ -30,4 +30,12 @@ public class EmployeeDTO {
 
     @ApiModelProperty(value = "名字")
     private String employeeName;
+
+    public EmployeeDTO(Integer pageNo, Integer pageSize, Integer deptId, Integer jobId, String employeeName) {
+        this.pageNo = pageNo;
+        this.pageSize = pageSize;
+        this.deptId = deptId;
+        this.jobId = jobId;
+        this.employeeName = employeeName;
+    }
 }

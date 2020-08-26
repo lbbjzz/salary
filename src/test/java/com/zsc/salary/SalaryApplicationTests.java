@@ -33,11 +33,6 @@ class SalaryApplicationTests {
     }
 
     @Test
-    void delete(){
-        employeeService.deleteById(3);
-    }
-
-    @Test
     void update(){
         Employee employee = new Employee();
         employee.setId(4);
