@@ -41,7 +41,10 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
     @Override
     public Map<String, Object> listJob(Integer pageNo, Integer pageSize) {
         Map<String, Object> map = new HashMap<>(2);
-        PageHelper.startPage(pageNo, pageSize);
+
+        if (pageNo >= 0 && pageSize >= 0) {
+            PageHelper.startPage(pageNo, pageSize);
+        }
         List<Job> jobs = jobMapper.selectList(null);
         PageInfo<Job> info = new PageInfo<>(jobs);
         map.put("jobs", jobs);

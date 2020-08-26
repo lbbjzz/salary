@@ -20,8 +20,10 @@ public interface JobService extends IService<Job> {
     /**
      * 分页获取岗位信息
      *
+     *
      * @param pageNo   页号
      * @param pageSize 每页显示的数量
+     * 当pageNo, pageSize小于0时，不分页
      * @return 岗位的信息, total 为总数量
      */
     Map<String, Object> listJob(Integer pageNo, Integer pageSize);

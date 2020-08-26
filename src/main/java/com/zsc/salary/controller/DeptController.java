@@ -71,7 +71,7 @@ public class DeptController {
         return GlobalResponse.success().data("dept", dept).message("查找成功");
     }
 
-    @ApiOperation(value = "分页查询所有部门信息")
+    @ApiOperation(value = "分页查询所有部门信息", notes = "当pageNo, pageSize小于0时，不分页")
     @GetMapping("/listDept")
     public GlobalResponse listDept(@RequestParam Integer pageNo,
                                    @RequestParam Integer pageSize) {

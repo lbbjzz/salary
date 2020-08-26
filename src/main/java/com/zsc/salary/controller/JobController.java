@@ -64,7 +64,7 @@ public class JobController {
         return GlobalResponse.failed().message("更新失败");
     }
 
-    @ApiOperation(value = "查询职位信息")
+    @ApiOperation(value = "查询职位信息", notes = "当pageNo, pageSize小于0时，不分页")
     @GetMapping("/listJob/{pageNo}/{pageSize}")
     public GlobalResponse listJob(@PathVariable(value = "pageNo") Integer pageNo,
                                   @PathVariable("pageSize") Integer pageSize) {
