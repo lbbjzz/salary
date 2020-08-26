@@ -83,5 +83,14 @@ public class EmployeeController {
         return GlobalResponse.success().message("修改成功");
     }
 
+    @PostMapping("/deleteById")
+    public GlobalResponse deleteById(@RequestParam Integer id) {
+        int flag = employeeService.deleteById(id);
+        if (flag == 0){
+            return GlobalResponse.failed().message("删除失败");
+        }
+        return GlobalResponse.success().message("删除成功");
+    }
+
 }
 

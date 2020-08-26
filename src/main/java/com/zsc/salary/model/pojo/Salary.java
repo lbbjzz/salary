@@ -91,6 +91,9 @@ public class Salary implements Serializable {
     @ApiModelProperty(value = "应发工资")
     private BigDecimal shouldPay;
 
+    @ApiModelProperty(value = "结算状态")
+    private Integer status;
+
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @ApiModelProperty(value = "创建时间")

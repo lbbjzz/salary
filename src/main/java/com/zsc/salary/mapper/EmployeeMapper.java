@@ -35,4 +35,5 @@ public interface EmployeeMapper extends BaseMapper<Employee> {
     List<EmployeeVO> listEmployeeVO(Map<String, Object> map);
 
 
+    int deleteEmployeeById(Integer id);
 }

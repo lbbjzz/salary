@@ -34,6 +34,14 @@
         </choose>
     </select>
 
+    <update id="deleteEmployeeById" parameterType="int">
+        update employee
+        <set>
+            status = 0
+        </set>
+        where id = #{id}
+    </update>
+
     <resultMap id="EmployeeVO" type="com.zsc.salary.model.vo.EmployeeVO">
         <id property="id" column="id"/>
         <result property="employeeName" column="employee_name"/>

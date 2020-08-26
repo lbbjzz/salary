@@ -44,5 +44,6 @@ public interface EmployeeService extends IService<Employee> {
      */
     Employee findById(Integer id);
 
+    int deleteById(Integer id);
 
 }

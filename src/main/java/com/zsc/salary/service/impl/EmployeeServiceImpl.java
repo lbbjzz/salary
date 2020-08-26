@@ -126,4 +126,11 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         return employee;
     }
 
+    @Override
+    public int deleteById(Integer id) {
+        int flag = employeeMapper.deleteEmployeeById(id);
+        return flag;
+
+    }
+
 }
