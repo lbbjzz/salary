@@ -26,9 +26,6 @@ public class ImportDto implements Serializable {
     @ApiModelProperty(value = "导入Id", required = true)
     private Integer id;
 
-    @ApiModelProperty(value = "员工ID", required = true)
-    private Integer employeeId;
-
     @ApiModelProperty(value = "病假天数")
     private Integer sickLeaveDay = 0;
 
