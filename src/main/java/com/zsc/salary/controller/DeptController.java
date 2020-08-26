@@ -4,6 +4,7 @@ package com.zsc.salary.controller;
 import com.zsc.salary.bean.GlobalResponse;
 import com.zsc.salary.model.pojo.Dept;
 import com.zsc.salary.service.DeptService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -24,6 +25,7 @@ public class DeptController {
     @Resource
     private DeptService deptService;
 
+    @ApiOperation(value = "新增部门信息")
     @PostMapping("/insertDept")
     public GlobalResponse insertDept(@RequestBody Dept dept) {
         if (dept == null) {
@@ -33,6 +35,7 @@ public class DeptController {
         return GlobalResponse.success().message("添加成功");
     }
 
+    @ApiOperation(value = "删除部门信息", notes = "逻辑删除")
     @DeleteMapping("/deleteDept")
     public GlobalResponse deleteDept(@RequestParam Integer id) {
         int flag = deptService.deleteById(id);
@@ -42,6 +45,7 @@ public class DeptController {
         return GlobalResponse.success().message("删除成功");
     }
 
+    @ApiOperation(value = "更新部门信息", notes = "0为更新失败，1为更新成功")
     @PostMapping("/updateDept")
     public GlobalResponse updateDept(@RequestBody Dept dept) {
         int flag = 0;
@@ -54,6 +58,7 @@ public class DeptController {
         return GlobalResponse.success().message("更新成功");
     }
 
+    @ApiOperation(value = "根据id查询部门信息")
     @GetMapping("/findById")
     public GlobalResponse findById(@RequestParam Integer id) {
         Dept dept = deptService.findById(id);
@@ -63,6 +68,7 @@ public class DeptController {
         return GlobalResponse.success().data("dept", dept).message("查找成功");
     }
 
+    @ApiOperation(value = "分页查询所有部门信息")
     @GetMapping("/listDept")
     public GlobalResponse listDept(@RequestParam Integer pageNo,
                                    @RequestParam Integer pageSize) {

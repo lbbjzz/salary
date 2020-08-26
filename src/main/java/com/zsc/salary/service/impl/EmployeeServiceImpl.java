@@ -72,7 +72,6 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         Job  job = jobService.findById(employee.getJobId());
         Dept dept = deptService.findById(employee.getDeptId());
 
-        System.out.println("wwwwww" + dept);
         if(job == null || dept == null){
             flag = -1;
             return flag;
@@ -108,7 +107,7 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         if (employeeDTO.getJobId() != null) {
             queryMap.put("jobId", employeeDTO.getJobId());
         }
-        if (!employeeDTO.getEmployeeName().isEmpty() && employeeDTO.getEmployeeName() != null) {
+        if (!employeeDTO.getEmployeeName().isEmpty() || employeeDTO.getEmployeeName() != null) {
             queryMap.put("employeeName", employeeDTO.getEmployeeName());
         }
 

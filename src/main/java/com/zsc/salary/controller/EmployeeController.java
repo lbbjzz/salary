@@ -5,6 +5,7 @@ import com.zsc.salary.bean.GlobalResponse;
 import com.zsc.salary.model.dto.EmployeeDTO;
 import com.zsc.salary.model.pojo.Employee;
 import com.zsc.salary.service.EmployeeService;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,7 @@ public class EmployeeController {
     @Resource
     private EmployeeService employeeService;
 
+    @ApiOperation(value = "新增员工信息")
     @PostMapping("/insertEmployee")
     public GlobalResponse insertEmployee(@RequestBody Employee employee) {
         if (employee == null) {
@@ -36,6 +38,7 @@ public class EmployeeController {
         return GlobalResponse.success().message("添加成功");
     }
 
+    @ApiOperation(value = "根据id查询员工信息")
     @GetMapping("/findById")
     public GlobalResponse findById(@RequestParam Integer id) {
         Employee employee = employeeService.findById(id);
@@ -45,10 +48,9 @@ public class EmployeeController {
         return GlobalResponse.success().data("employee", employee).message("获取成功");
     }
 
-    @GetMapping("/listEmployee")
+    @ApiOperation(value = "根据条件分页查询员工信息")
+    @GetMapping("/listEmployeeVO")
     public GlobalResponse listEmployeeVO(EmployeeDTO employeeDTO) {
-        log.info(String.valueOf(employeeDTO));
-        System.out.println(employeeDTO);
         Map<String, Object> map = employeeService.listEmployeeVO(employeeDTO);
         if (map.isEmpty()) {
             return GlobalResponse.failed().message("获取失败");
@@ -56,6 +58,7 @@ public class EmployeeController {
         return GlobalResponse.success().data(map).message("获取成功");
     }
 
+    @ApiOperation(value = "更新员工信息", notes = "-2为岗位超过核定人数，-1为要修改的部门或岗位不存在，0为更新失败，1为更新成功")
     @PostMapping("/updateEmployee")
     public GlobalResponse updateEmployee(@RequestBody Employee employee) {
         int flag = 0;
@@ -74,6 +77,7 @@ public class EmployeeController {
         return GlobalResponse.success().message("修改成功");
     }
 
+    @ApiOperation(value = "删除员工信息")
     @DeleteMapping("/deleteEmployee")
     public GlobalResponse deleteEmployee(@RequestParam Integer id) {
         int flag = employeeService.deleteById(id);
