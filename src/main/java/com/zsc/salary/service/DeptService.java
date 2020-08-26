@@ -39,6 +39,7 @@ public interface DeptService extends IService<Dept> {
      * 分页查询部门信息
      * @param pageNo 分页的当前页数
      * @param pageSize 分页的大小
+     * 当pageNo, pageSize小于0时，不分页
      * @return 返回List<Dept>数据和total总个数
      */
     Map<String, Object> listDept(Integer pageNo, Integer pageSize);

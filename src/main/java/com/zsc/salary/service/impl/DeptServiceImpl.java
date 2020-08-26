@@ -76,7 +76,10 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
     @Override
     public Map<String, Object> listDept(Integer pageNo, Integer pageSize) {
         Map<String, Object> map = new HashMap<>(2);
-        PageHelper.startPage(pageNo, pageSize);
+
+        if (pageNo >= 0 && pageSize >= 0){
+            PageHelper.startPage(pageNo, pageSize);
+        }
         List<Dept> list = deptMapper.selectList(null);
         PageInfo<Dept> pageInfo = new PageInfo<>(list);
 
