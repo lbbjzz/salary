@@ -3,6 +3,7 @@ package com.zsc.salary.controller;
 
 import com.zsc.salary.bean.GlobalResponse;
 import com.zsc.salary.model.dto.EmployeeDTO;
+import com.zsc.salary.model.dto.FixedSalaryDto;
 import com.zsc.salary.model.pojo.Employee;
 import com.zsc.salary.service.EmployeeService;
 import io.swagger.annotations.ApiOperation;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -90,6 +92,31 @@ public class EmployeeController {
             return GlobalResponse.failed().message("删除失败");
         }
         return GlobalResponse.success().message("删除成功");
+    }
+
+    @ApiOperation(value = "查询员工固定工资", notes = "total为数据总数用于分页，employeeFixedSalaryVos 为查询的数据")
+    @GetMapping("/listEmployeeFixedSalaryVo")
+    public GlobalResponse listEmployeeFixedSalaryVo(FixedSalaryDto fixedSalaryDto) {
+
+        log.error(String.valueOf(fixedSalaryDto));
+        if (fixedSalaryDto == null) {
+            return GlobalResponse.failed().message("数据有误");
+        }
+        if (fixedSalaryDto.getPageNo() == null && fixedSalaryDto.getPageSize() == null) {
+            return GlobalResponse.failed().message("数据有误");
+        }
+        Map<String, Object> map = new HashMap<>();
+        if (fixedSalaryDto.getDeptId() != -1) {
+            map.put("deptId", fixedSalaryDto.getDeptId());
+        }
+        if (!"".equals(fixedSalaryDto.getSortName())) {
+            map.put("sortName", fixedSalaryDto.getSortName());
+            map.put("sortOrder", fixedSalaryDto.getSortOrder());
+        }
+        map.put("pageNo", fixedSalaryDto.getPageNo());
+        map.put("pageSize", fixedSalaryDto.getPageSize());
+        Map<String, Object> infoMap = employeeService.listEmployeeFixedSalaryVo(map);
+        return GlobalResponse.success().data(infoMap).message("查询成功");
     }
 
 }

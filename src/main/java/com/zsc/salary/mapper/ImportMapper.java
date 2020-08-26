@@ -4,6 +4,7 @@ import com.zsc.salary.model.data.UploadData;
 import com.zsc.salary.model.pojo.Import;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.zsc.salary.model.vo.ImportVo;
+import io.swagger.models.auth.In;
 
 import java.util.List;
 import java.util.Map;
@@ -36,4 +37,10 @@ public interface ImportMapper extends BaseMapper<Import> {
      * @return 考勤表中的重复数据
      */
     List<ImportVo> listImportVoRepeatData();
+
+    /**
+     * 批量删除重复的数据
+     * @param map 导入数据的ID数组
+     */
+    void deleteImportRepeat(Map<String, Object> map);
 }

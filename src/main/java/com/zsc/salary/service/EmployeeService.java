@@ -46,4 +46,11 @@ public interface EmployeeService extends IService<Employee> {
 
     int deleteById(Integer id);
 
+    /**
+     *  获取员工的固定工资
+     * @param map 查询条件 含分页
+     * @return total 数据的总数 和 数据employeeFixedSalaryVo
+     */
+    Map<String, Object> listEmployeeFixedSalaryVo(Map<String, Object> map);
+
 }

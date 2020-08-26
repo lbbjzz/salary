@@ -18,6 +18,12 @@
         )
         </foreach>
     </insert>
+    <delete id="deleteImportRepeat" parameterType="Map">
+        delete from import where id in
+        <foreach collection="importId" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
 
     <select id="listImportVo" resultMap="importVo" parameterType="Map">
         SELECT
@@ -70,9 +76,9 @@
     <select id="listImportVoRepeatData" resultType="com.zsc.salary.model.vo.ImportVo">
         SELECT
             i.id,
-            e.NAME employee_name,
-            d.NAME employee_dept,
-            j.NAME employee_job,
+            e.name employee_name,
+            d.name employee_dept,
+            j.name employee_job,
             i.sick_leave_day,
             i.personal_leave_day,
             i.late_day,
@@ -92,14 +98,8 @@
           AND i.deleted = 0
           AND to_days( i.create_time ) = to_days(
                 now())
-          AND employee_id IN (
-            SELECT
-                employee_id
-            FROM
-                import
-            GROUP BY
-                employee_id
-            HAVING
-                count( employee_id ) > 1)
+          AND employee_id IN
+              (select employee_id from import WHERE to_days( create_time ) = to_days(now())
+              group by employee_id having count(employee_id) > 1)
     </select>
 </mapper>

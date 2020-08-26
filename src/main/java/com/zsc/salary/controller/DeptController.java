@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -82,6 +83,13 @@ public class DeptController {
             return GlobalResponse.failed().message("查找失败");
         }
         return GlobalResponse.success().data(map).message("查找成功");
+    }
+
+    @ApiOperation(value = "获取全部的部门信息（id,name)")
+    @GetMapping("/allDept")
+    public GlobalResponse allDept() {
+        List<Dept> depts = deptService.allDept();
+        return GlobalResponse.success().data("allDept", depts);
     }
 }
 

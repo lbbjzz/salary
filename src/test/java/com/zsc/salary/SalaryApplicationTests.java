@@ -3,11 +3,14 @@ package com.zsc.salary;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zsc.salary.mapper.EmployeeMapper;
 import com.zsc.salary.model.pojo.Employee;
+import com.zsc.salary.model.vo.EmployeeFixedSalaryVo;
 import com.zsc.salary.service.EmployeeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
 
 @SpringBootTest
 class SalaryApplicationTests {
@@ -34,11 +37,8 @@ class SalaryApplicationTests {
 
     @Test
     void update(){
-        Employee employee = new Employee();
-        employee.setId(4);
-        employee.setName("ggggg");
-        employee.setSex(true);
-        System.out.println(employeeService.update(employee));
+        List<EmployeeFixedSalaryVo> employeeFixedSalaryVos = employeeMapper.listEmployeeFixedSalaryVo(new HashMap<>());
+        System.out.println(employeeFixedSalaryVos);
     }
 
 }

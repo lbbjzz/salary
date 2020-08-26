@@ -2,6 +2,7 @@ package com.zsc.salary.mapper;
 
 import com.zsc.salary.model.pojo.Employee;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.zsc.salary.model.vo.EmployeeFixedSalaryVo;
 import com.zsc.salary.model.vo.EmployeeVO;
 import org.apache.ibatis.annotations.Select;
 
@@ -36,4 +37,11 @@ public interface EmployeeMapper extends BaseMapper<Employee> {
 
 
     int deleteEmployeeById(Integer id);
+
+    /**
+     * 查询员工的固定工资
+     * @param map 查询条件
+     * @return 员工的固定工资
+     */
+    List<EmployeeFixedSalaryVo> listEmployeeFixedSalaryVo(Map<String, Object> map);
 }

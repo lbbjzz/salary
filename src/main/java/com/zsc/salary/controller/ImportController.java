@@ -7,6 +7,7 @@ import com.zsc.salary.listener.UploadDataListener;
 import com.zsc.salary.listener.UploadDataNotCheckListener;
 import com.zsc.salary.model.data.UploadData;
 import com.zsc.salary.model.dto.ImportDto;
+import com.zsc.salary.model.dto.ImportIdArrays;
 import com.zsc.salary.model.vo.ImportVo;
 import com.zsc.salary.service.ImportService;
 import io.swagger.annotations.*;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -114,6 +116,14 @@ public class ImportController {
             return GlobalResponse.failed();
         }
         return GlobalResponse.success().data("repeatDataImportVo", list).message("获取成功！");
+    }
+
+    @ApiOperation(value = "批量删除重复的数据")
+    @PostMapping("/deleteRepeatImportData")
+    public GlobalResponse deleteRepeatImportData(@RequestBody ImportIdArrays importIdArrays) {
+        importService.deleteRepeatImportData(importIdArrays.getId());
+        System.out.println(Arrays.toString(importIdArrays.getId()));
+        return GlobalResponse.success().message("获取成功！");
     }
 
 }

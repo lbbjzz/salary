@@ -12,13 +12,12 @@ import com.zsc.salary.model.dto.ImportDto;
 import com.zsc.salary.model.vo.ImportVo;
 import com.zsc.salary.service.ImportService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.swagger.models.auth.In;
 import org.dozer.Mapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -113,6 +112,14 @@ public class ImportServiceImpl extends ServiceImpl<ImportMapper, Import> impleme
     @Override
     public List<ImportVo> listImportVoRepeatData() {
         return importMapper.listImportVoRepeatData();
+    }
+
+    @Override
+    public void deleteRepeatImportData(Integer[] id) {
+        List<Integer> importId = new ArrayList<> (Arrays.asList(id));
+        Map<String, Object> map = new HashMap<>(1);
+        map.put("importId", importId);
+        importMapper.deleteImportRepeat(map);
     }
 
 

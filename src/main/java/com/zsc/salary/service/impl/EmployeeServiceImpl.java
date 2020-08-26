@@ -8,6 +8,7 @@ import com.zsc.salary.model.pojo.Dept;
 import com.zsc.salary.model.pojo.Employee;
 import com.zsc.salary.mapper.EmployeeMapper;
 import com.zsc.salary.model.pojo.Job;
+import com.zsc.salary.model.vo.EmployeeFixedSalaryVo;
 import com.zsc.salary.model.vo.EmployeeVO;
 import com.zsc.salary.service.DeptService;
 import com.zsc.salary.service.EmployeeService;
@@ -131,6 +132,19 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         int flag = employeeMapper.deleteEmployeeById(id);
         return flag;
 
+    }
+
+    @Override
+    public Map<String, Object> listEmployeeFixedSalaryVo(Map<String, Object> map) {
+        Map<String, Object> returnMap = new HashMap<>(2);
+        Integer pageNo = (Integer) map.get("pageNo");
+        Integer pageSize = (Integer) map.get("pageSize");
+        PageHelper.startPage(pageNo, pageSize);
+        List<EmployeeFixedSalaryVo> employeeFixedSalaryVos = employeeMapper.listEmployeeFixedSalaryVo(map);
+        PageInfo<EmployeeFixedSalaryVo> info = new PageInfo<>(employeeFixedSalaryVos);
+        returnMap.put("employeeFixedSalaryVos", employeeFixedSalaryVos);
+        returnMap.put("total", info.getTotal());
+        return returnMap;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.zsc.salary.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zsc.salary.model.dto.EmployeeDTO;
@@ -101,5 +102,10 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
             }
         }
         return dept;
+    }
+
+    @Override
+    public List<Dept> allDept() {
+        return deptMapper.selectList(new QueryWrapper<Dept>().select("id", "name"));
     }
 }

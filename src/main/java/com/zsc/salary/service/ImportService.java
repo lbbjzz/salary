@@ -60,4 +60,10 @@ public interface ImportService extends IService<Import> {
      */
     List<ImportVo> listImportVoRepeatData();
 
+    /**
+     * 删除导入的重复数据
+     * @param id import ID数组
+     */
+    void deleteRepeatImportData(Integer[] id);
+
 }

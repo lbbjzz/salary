@@ -2,6 +2,7 @@ package com.zsc.salary.model.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -57,6 +58,9 @@ public class Employee implements Serializable {
 
     @ApiModelProperty(value = "身份证号")
     private String idCard;
+
+    @ApiModelProperty(value = "采暖补贴")
+    private BigDecimal heatingSubsidy;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)

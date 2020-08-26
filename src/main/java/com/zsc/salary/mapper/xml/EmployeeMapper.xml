@@ -33,7 +33,6 @@
             </when>
         </choose>
     </select>
-
     <update id="deleteEmployeeById" parameterType="int">
         update employee
         <set>
@@ -53,4 +52,46 @@
         <result property="idCard" column="id_card"/>
         <result property="status" column="status"/>
     </resultMap>
+
+    <select id="listEmployeeFixedSalaryVo" resultType="com.zsc.salary.model.vo.EmployeeFixedSalaryVo" parameterType="Map">
+        SELECT
+            e.id,
+            e.name,
+            d.name dept_name,
+            j.name job_name,
+            e.heating_subsidy,
+            e.create_time,
+            e.modify_time
+        FROM
+            employee e,
+            dept d,
+            job j
+        WHERE
+            e.job_id = j.id
+          AND e.dept_id = d.id
+          AND e.status = 1
+        <choose>
+            <when test="deptId != null">
+                AND e.dept_id = #{deptId}
+            </when>
+            <when test="sortName == 'id' and sortOrder == true">
+                ORDER BY e.id ASC
+            </when>
+            <when test="sortName == 'id' and sortOrder == false">
+                ORDER BY e.id DESC
+            </when>
+            <when test="sortName == 'heatingSubsidy' and sortOrder == true">
+                ORDER BY e.heating_subsidy ASC
+            </when>
+            <when test="sortName == 'heatingSubsidy' and sortOrder == false">
+                ORDER BY e.heating_subsidy DESC
+            </when>
+            <when test="sortName == 'modifyTime' and sortOrder == true">
+                ORDER BY e.modify_time ASC
+            </when>
+            <when test="sortName == 'modifyTime' and sortOrder == false">
+                ORDER BY e.modify_time DESC
+            </when>
+        </choose>
+    </select>
 </mapper>
