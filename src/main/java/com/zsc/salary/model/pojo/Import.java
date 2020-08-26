@@ -57,7 +57,8 @@ public class Import implements Serializable {
     private BigDecimal backPay;
 
     @ApiModelProperty(value = "状态，0为未结算，1为已结算")
-    private Integer status;
+    @TableField(fill = FieldFill.INSERT)
+    private boolean deleted;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
