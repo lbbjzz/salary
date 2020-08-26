@@ -7,6 +7,7 @@ import com.zsc.salary.listener.UploadDataListener;
 import com.zsc.salary.listener.UploadDataNotCheckListener;
 import com.zsc.salary.model.data.UploadData;
 import com.zsc.salary.model.dto.ImportDto;
+import com.zsc.salary.model.vo.ImportVo;
 import com.zsc.salary.service.ImportService;
 import io.swagger.annotations.*;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -102,5 +104,17 @@ public class ImportController {
         }
         return GlobalResponse.success().data(map).message("获取成功！");
     }
+
+
+    @ApiOperation(value = "查询导入中重复的数据", notes = "包含listImportVo数据， total全部的总数量")
+    @GetMapping("/listImportVoRepeatData")
+    public GlobalResponse listImportVoRepeatData() {
+        List<ImportVo> list  = importService.listImportVoRepeatData();
+        if (list.isEmpty()) {
+            return GlobalResponse.failed();
+        }
+        return GlobalResponse.success().data("repeatDataImportVo", list).message("获取成功！");
+    }
+
 }
 

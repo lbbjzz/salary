@@ -44,8 +44,6 @@
           AND
             e.job_id = j.id
           AND
-            e.status != 0
-          AND
             i.deleted = 0
         <choose>
             <when test="time == 'now'">
@@ -53,7 +51,8 @@
             </when>
         </choose>
     </select>
-    
+
+
     <resultMap id="importVo" type="com.zsc.salary.model.vo.ImportVo">
         <id property="id" column="id"/>
         <result property="employeeName" column="employee_name"/>
@@ -64,7 +63,43 @@
         <result property="lateDay" column="late_day"/>
         <result property="overtimeDay" column="overtime_day"/>
         <result property="backPay" column="back_pay"/>
-        <result property="status" column="status"/>
+        <result property="deleted" column="deleted"/>
         <result property="createTime" column="create_time"/>
     </resultMap>
+
+    <select id="listImportVoRepeatData" resultType="com.zsc.salary.model.vo.ImportVo">
+        SELECT
+            i.id,
+            e.NAME employee_name,
+            d.NAME employee_dept,
+            j.NAME employee_job,
+            i.sick_leave_day,
+            i.personal_leave_day,
+            i.late_day,
+            i.overtime_day,
+            i.back_pay,
+            i.create_time,
+            i.deleted
+        FROM
+            import i,
+            employee e,
+            job j,
+            dept d
+        WHERE
+            i.employee_id = e.id
+          AND e.dept_id = d.id
+          AND e.job_id = j.id
+          AND i.deleted = 0
+          AND to_days( i.create_time ) = to_days(
+                now())
+          AND employee_id IN (
+            SELECT
+                employee_id
+            FROM
+                import
+            GROUP BY
+                employee_id
+            HAVING
+                count( employee_id ) > 1)
+    </select>
 </mapper>

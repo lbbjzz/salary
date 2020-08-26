@@ -54,7 +54,7 @@ public class ImportVo {
     private BigDecimal backPay;
 
     @ApiModelProperty(value = "状态，0为未结算，1为已结算")
-    private Integer status;
+    private Integer deleted;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)

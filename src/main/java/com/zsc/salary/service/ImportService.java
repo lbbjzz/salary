@@ -4,6 +4,7 @@ import com.zsc.salary.model.data.UploadData;
 import com.zsc.salary.model.pojo.Import;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.zsc.salary.model.dto.ImportDto;
+import com.zsc.salary.model.vo.ImportVo;
 
 import java.util.List;
 import java.util.Map;
@@ -52,5 +53,11 @@ public interface ImportService extends IService<Import> {
      * @return List<ImportVo>数据 和 total 总数据
      */
     Map<String, Object> listImportVo(Integer pageNo, Integer pageSize, String time);
+
+    /**
+     * 获取导入时当天重复的数据
+     * @return 导入时重复的数据
+     */
+    List<ImportVo> listImportVoRepeatData();
 
 }

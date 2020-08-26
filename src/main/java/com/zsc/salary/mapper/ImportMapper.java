@@ -30,4 +30,10 @@ public interface ImportMapper extends BaseMapper<Import> {
      * @return Import显示的数据
      */
     List<ImportVo> listImportVo(Map<String, Object> map);
+
+    /**
+     * 获取当天导入员工考勤表中的重复数据
+     * @return 考勤表中的重复数据
+     */
+    List<ImportVo> listImportVoRepeatData();
 }

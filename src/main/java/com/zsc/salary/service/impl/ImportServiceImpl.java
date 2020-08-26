@@ -110,5 +110,10 @@ public class ImportServiceImpl extends ServiceImpl<ImportMapper, Import> impleme
         return map;
     }
 
+    @Override
+    public List<ImportVo> listImportVoRepeatData() {
+        return importMapper.listImportVoRepeatData();
+    }
+
 
 }
