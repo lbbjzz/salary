@@ -29,7 +29,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.strictInsertFill(metaObject, "modifyTime", LocalDateTime.class, LocalDateTime.now());
         this.strictInsertFill(metaObject, "deleted", Boolean.class, false);
         this.strictInsertFill(metaObject, "status", Integer.class, 2);
-        this.strictInsertFill(metaObject, "heatingSubsidy", BigDecimal.class, 0);
+        this.strictInsertFill(metaObject, "heatingSubsidy", BigDecimal.class, BigDecimal.valueOf(0));
     }
 
 

@@ -19,7 +19,7 @@
         </foreach>
     </insert>
     <delete id="deleteImportRepeat" parameterType="Map">
-        delete from import where id in
+        update import set deleted = 1 where id in
         <foreach collection="importId" item="id" open="(" separator="," close=")">
             #{id}
         </foreach>
@@ -53,7 +53,7 @@
             i.deleted = 0
         <choose>
             <when test="time == 'now'">
-                AND to_days(i.create_time) = to_days(now())
+                AND DATE_FORMAT( i.create_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
             </when>
         </choose>
     </select>
@@ -96,10 +96,10 @@
           AND e.dept_id = d.id
           AND e.job_id = j.id
           AND i.deleted = 0
-          AND to_days( i.create_time ) = to_days(
-                now())
+          AND DATE_FORMAT( i.create_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
           AND employee_id IN
-              (select employee_id from import WHERE to_days( create_time ) = to_days(now())
+              (select employee_id from import WHERE DATE_FORMAT( create_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+              AND deleted = 0
               group by employee_id having count(employee_id) > 1)
     </select>
 </mapper>
