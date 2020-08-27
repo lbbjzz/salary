@@ -48,4 +48,26 @@
         <result property="createTime" column="create_time"/>
         <result property="modifyTime" column="modify_time"/>
     </resultMap>
+
+    <select id="getMaxSalary" parameterType="Map" resultMap="salaryStat">
+        select
+            MAX(s.net_pay) maxSalary,
+            MIN(s.net_pay) minSalary,
+            AVG(s.net_pay) avgSalary
+        from
+            salary s,
+            employee e
+        where
+            DATE_FORMAT(s.create_time, '%Y-%m') = DATE_FORMAT(#{dateTime}, '%Y-%m')
+            and
+            s.employee_id = e.id
+            and
+            e.dept_id = #{deptId}
+    </select>
+
+    <resultMap id="salaryStat" type="map">
+        <result property="maxSalary" column="maxSalary"/>
+        <result property="minSalary" column="minSalary"/>
+        <result property="avgSalary" column="avgSalary"/>
+    </resultMap>
 </mapper>

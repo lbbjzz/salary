@@ -3,6 +3,8 @@ package com.zsc.salary.service;
 import com.zsc.salary.model.pojo.Salary;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -32,4 +34,7 @@ public interface SalaryService extends IService<Salary> {
      * @return 员工工资信息
      */
     Map<String, Object> listSalaryVo(Integer pageNo, Integer pageSize);
+
+    Map<String, Object> getSalaryStat(LocalDateTime dateTime, Integer deptId);
+
 }

@@ -35,7 +35,11 @@ public interface EmployeeMapper extends BaseMapper<Employee> {
      */
     List<EmployeeVO> listEmployeeVO(Map<String, Object> map);
 
-
+    /**
+     * 根据id逻辑删除员工信息
+     * @param id 要删除的员工id
+     * @return 删除结果，0为删除失败，1为删除成功
+     */
     int deleteEmployeeById(Integer id);
 
     /**

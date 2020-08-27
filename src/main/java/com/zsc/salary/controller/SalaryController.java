@@ -3,9 +3,14 @@ package com.zsc.salary.controller;
 
 import com.zsc.salary.bean.GlobalResponse;
 import com.zsc.salary.service.SalaryService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -38,6 +43,21 @@ public class SalaryController {
             return GlobalResponse.failed();
         }
         return GlobalResponse.success().data(map);
+    }
+
+    @ApiOperation(value = "获取最高、最低、平均工资", notes = "按月份和部门查询")
+    @GetMapping("/getSalaryStat")
+    public GlobalResponse getSalaryStat(@RequestParam String dateTime,
+                                       @RequestParam Integer deptId){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime time = LocalDateTime.parse(dateTime, formatter);
+
+        Map<String, Object> salary = salaryService.getSalaryStat(time, deptId);
+
+        if (salary == null) {
+            return GlobalResponse.failed().message("查询失败");
+        }
+        return GlobalResponse.success().data(salary);
     }
 }
 

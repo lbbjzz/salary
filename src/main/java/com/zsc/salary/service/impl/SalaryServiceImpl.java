@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -156,5 +157,20 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
         map.put("salaryVoList", salaryVoList);
         map.put("total", pageInfo.getTotal());
         return map;
+    }
+
+    @Override
+    public Map<String, Object> getSalaryStat(LocalDateTime dateTime, Integer deptId) {
+        if (dateTime == null || deptId == null) {
+            throw new RuntimeException("查询数据为空，查询失败");
+        }
+        Map<String, Object> queryMap = new HashMap<>(2);
+        queryMap.put("dateTime", dateTime);
+        queryMap.put("deptId", deptId);
+
+        Map<String, Object> salary = salaryMapper.getMaxSalary(queryMap);
+
+        System.out.println(salary);
+        return salary;
     }
 }
