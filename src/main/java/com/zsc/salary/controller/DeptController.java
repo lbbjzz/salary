@@ -91,5 +91,13 @@ public class DeptController {
         List<Dept> depts = deptService.allDept();
         return GlobalResponse.success().data("allDept", depts);
     }
+
+    @ApiOperation(value = "判断部门名是否重复")
+    @GetMapping("/deptNameExisting")
+    public GlobalResponse deptNameExisting(String name) {
+        Boolean flag = deptService.deptNameExisting(name);
+        return GlobalResponse.success().data("isExist", flag);
+    }
+
 }
 

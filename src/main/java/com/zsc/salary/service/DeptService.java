@@ -63,4 +63,11 @@ public interface DeptService extends IService<Dept> {
      * @return 全部的部门信息
      */
     List<Dept> allDept();
+
+    /**
+     * 判断部门名是否重复
+     * @param name 部门名
+     * @return true 为重复
+     */
+    Boolean deptNameExisting(String name);
 }

@@ -108,4 +108,11 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
     public List<Dept> allDept() {
         return deptMapper.selectList(new QueryWrapper<Dept>().select("id", "name"));
     }
+
+    @Override
+    public Boolean deptNameExisting(String name) {
+        Dept dept = deptMapper.selectOne(new QueryWrapper<Dept>().eq("name", name));
+        log.error(String.valueOf(dept));
+        return dept != null;
+    }
 }

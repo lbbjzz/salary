@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zsc.salary.mapper.EmployeeMapper;
 import com.zsc.salary.model.pojo.Employee;
 import com.zsc.salary.model.vo.EmployeeFixedSalaryVo;
+import com.zsc.salary.service.CalculateService;
 import com.zsc.salary.service.EmployeeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +22,9 @@ class SalaryApplicationTests {
     @Resource
     private EmployeeService employeeService;
 
+    @Resource
+    private CalculateService calculateService;
+
     @Test
     void contextLoads() {
         System.out.println(employeeMapper.selectOne(new QueryWrapper<Employee>().select("id").eq("id", 2)));
@@ -37,8 +41,10 @@ class SalaryApplicationTests {
 
     @Test
     void update(){
-        List<EmployeeFixedSalaryVo> employeeFixedSalaryVos = employeeMapper.listEmployeeFixedSalaryVo(new HashMap<>());
-        System.out.println(employeeFixedSalaryVos);
+        for (int i = 9; i <= 21; i++) {
+            calculateService.insertCalculate(i);
+        }
+
     }
 
 }

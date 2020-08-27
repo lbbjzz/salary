@@ -2,4 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zsc.salary.mapper.CalculateMapper">
 
+    <select id="listCalculateVo" resultType="com.zsc.salary.model.vo.CalculateVo" parameterType="Map">
+        SELECT
+            c.*,
+            d.name dept_name,
+            j.name job_name
+        FROM
+            calculate c,
+            employee e,
+            dept d,
+            job j
+        WHERE
+            c.employee_id = e.id
+          AND e.status = 1
+          AND e.dept_id = d.id
+          AND e.job_id = j.id
+    </select>
 </mapper>
