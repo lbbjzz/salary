@@ -2,6 +2,7 @@ package com.zsc.salary.controller;
 
 
 import com.zsc.salary.bean.GlobalResponse;
+import com.zsc.salary.model.dto.ChangeFixedSalaryDto;
 import com.zsc.salary.model.dto.EmployeeDTO;
 import com.zsc.salary.model.dto.FixedSalaryDto;
 import com.zsc.salary.model.pojo.Employee;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -117,6 +119,24 @@ public class EmployeeController {
         map.put("pageSize", fixedSalaryDto.getPageSize());
         Map<String, Object> infoMap = employeeService.listEmployeeFixedSalaryVo(map);
         return GlobalResponse.success().data(infoMap).message("查询成功");
+    }
+
+    @ApiOperation(value = "操作员工固定工资", notes = "operation 1位编辑 2为增加 3位删除")
+    @PostMapping("/operationEmployeeFixedSalary")
+    public GlobalResponse operationEmployeeFixedSalary(@RequestBody ChangeFixedSalaryDto changeFixedSalaryDto) {
+        log.error(String.valueOf(changeFixedSalaryDto));
+        if (changeFixedSalaryDto == null) {
+            return GlobalResponse.failed().message("数据有误");
+        }
+        if (changeFixedSalaryDto.getOperation() == 1) {
+            employeeService.insertHeatingSubsidy(changeFixedSalaryDto.getEmployeeId(), changeFixedSalaryDto.getHeatingSubsidy());
+        } else if (changeFixedSalaryDto.getOperation() == 2){
+            employeeService.addHeatingSubsidy(changeFixedSalaryDto.getEmployeeId(), changeFixedSalaryDto.getHeatingSubsidy());
+        } else {
+            changeFixedSalaryDto.setHeatingSubsidy(BigDecimal.valueOf(0));
+            employeeService.insertHeatingSubsidy(changeFixedSalaryDto.getEmployeeId(), changeFixedSalaryDto.getHeatingSubsidy());
+        }
+        return GlobalResponse.success().message("查询成功");
     }
 
 }

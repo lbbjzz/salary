@@ -44,4 +44,16 @@ public interface EmployeeMapper extends BaseMapper<Employee> {
      * @return 员工的固定工资
      */
     List<EmployeeFixedSalaryVo> listEmployeeFixedSalaryVo(Map<String, Object> map);
+
+    /**
+     * 修改员工采暖补贴
+     * @param map employeeId 为员工Id数组 heatingSubsidy 为采暖补贴
+     */
+    void insertHeatingSubsidy(Map<String, Object> map);
+
+    /**
+     * 增加员工采暖补贴（在原始基础上增加）
+     * @param map employeeId 为员工Id数组 heatingSubsidy 为采暖补贴
+     */
+    void addHeatingSubsidy(Map<String, Object> map);
 }

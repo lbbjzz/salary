@@ -21,6 +21,8 @@
             e.dept_id = d.id
         AND
             e.job_id = j.id
+        AND
+            e.status = 1
         <choose>
             <when test="deptId != null">
                 AND e.dept_id = #{deptId}
@@ -94,4 +96,19 @@
             </when>
         </choose>
     </select>
+
+
+    <insert id="insertHeatingSubsidy" parameterType="Map">
+        UPDATE employee SET heating_subsidy = #{heatingSubsidy}  WHERE id in
+        <foreach collection="employeeId" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </insert>
+
+    <insert id="addHeatingSubsidy" parameterType="Map">
+        UPDATE employee SET heating_subsidy = heating_subsidy + #{heatingSubsidy}  WHERE id in
+        <foreach collection="employeeId" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </insert>
 </mapper>

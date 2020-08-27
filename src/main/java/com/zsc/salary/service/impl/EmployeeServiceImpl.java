@@ -19,9 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * <p>
@@ -145,6 +144,26 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         returnMap.put("employeeFixedSalaryVos", employeeFixedSalaryVos);
         returnMap.put("total", info.getTotal());
         return returnMap;
+    }
+
+    @Override
+    public void insertHeatingSubsidy(Integer[] employeeId, BigDecimal heatingSubsidy) {
+        Map<String, Object> map = returnHeatingSubsidyMap(employeeId, heatingSubsidy);
+        employeeMapper.insertHeatingSubsidy(map);
+    }
+
+    @Override
+    public void addHeatingSubsidy(Integer[] employeeId, BigDecimal heatingSubsidy) {
+        Map<String, Object> map = returnHeatingSubsidyMap(employeeId, heatingSubsidy);
+        employeeMapper.addHeatingSubsidy(map);
+    }
+
+    private Map<String, Object> returnHeatingSubsidyMap(Integer[] employeeId, BigDecimal heatingSubsidy) {
+        List<Integer> id = new ArrayList<>(Arrays.asList(employeeId));
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("employeeId", id);
+        map.put("heatingSubsidy", heatingSubsidy);
+        return map;
     }
 
 }

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -28,6 +29,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.strictInsertFill(metaObject, "modifyTime", LocalDateTime.class, LocalDateTime.now());
         this.strictInsertFill(metaObject, "deleted", Boolean.class, false);
         this.strictInsertFill(metaObject, "status", Integer.class, 2);
+        this.strictInsertFill(metaObject, "heatingSubsidy", BigDecimal.class, 0);
     }
 
 

@@ -60,6 +60,7 @@ public class Employee implements Serializable {
     private String idCard;
 
     @ApiModelProperty(value = "采暖补贴")
+    @TableField(fill = FieldFill.INSERT)
     private BigDecimal heatingSubsidy;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
