@@ -41,6 +41,9 @@ public class EmployeeFixedSalaryVo {
     @ApiModelProperty(value = "岗位名")
     private String jobName;
 
+    @ApiModelProperty(value = "岗位底薪")
+    private BigDecimal salary;
+
     @ApiModelProperty(value = "采暖补贴")
     private BigDecimal heatingSubsidy;
 
