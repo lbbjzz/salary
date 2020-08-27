@@ -1,8 +1,10 @@
 package com.zsc.salary.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.zsc.salary.model.pojo.Calculate;
 import com.zsc.salary.mapper.CalculateMapper;
+import com.zsc.salary.model.vo.CalculateVo;
 import com.zsc.salary.service.CalculateService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zsc.salary.utils.RedisUtil;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -55,6 +59,11 @@ public class CalculateServiceImpl extends ServiceImpl<CalculateMapper, Calculate
         Integer pageNo = (Integer) map.get("pageNo");
         Integer pageSize = (Integer) map.get("pageSize");
         PageHelper.startPage(pageNo, pageSize);
-        return null;
+        List<CalculateVo> calculateVoList = calculateMapper.listCalculateVo(null);
+        Map<String, Object> result = new HashMap<>();
+        PageInfo<CalculateVo> info = new PageInfo<>(calculateVoList);
+        result.put("calculateVoList", calculateVoList);
+        result.put("total", info.getTotal());
+        return result;
     }
 }

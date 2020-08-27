@@ -39,7 +39,7 @@ public class DeptController {
     }
 
     @ApiOperation(value = "删除部门信息", notes = "逻辑删除")
-    @DeleteMapping("/deleteDept")
+    @PostMapping("/deleteDept")
     public GlobalResponse deleteDept(@RequestParam Integer id) {
         int flag = deptService.deleteById(id);
         if (flag == -1){

@@ -4,13 +4,11 @@ package com.zsc.salary.controller;
 import com.zsc.salary.bean.GlobalResponse;
 import com.zsc.salary.model.pojo.Calculate;
 import com.zsc.salary.service.impl.CalculateServiceImpl;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>
@@ -36,6 +34,16 @@ public class CalculateController {
         else{
             return GlobalResponse.success().message("更新成功");
         }
+    }
+
+    @GetMapping("/listCalculateVo/{pageNo}/{pageSize}")
+    public GlobalResponse listCalculateVo(@PathVariable(value = "pageNo") Integer pageNo,
+                                          @PathVariable(value = "pageSize") Integer pageSize){
+        Map<String, Object> map = new HashMap<>();
+        map.put("pageNo", pageNo);
+        map.put("pageSize", pageSize);
+        Map<String, Object> resultMap = calculateService.listCalculateVo(map);
+        return GlobalResponse.success().data(resultMap).message("更新成功");
     }
 }
 

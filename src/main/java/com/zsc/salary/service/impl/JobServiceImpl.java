@@ -1,5 +1,6 @@
 package com.zsc.salary.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zsc.salary.model.dto.EmployeeDTO;
@@ -81,5 +82,11 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
 
         flag = jobMapper.deleteById(id);
         return flag;
+    }
+
+    @Override
+    public Boolean jobNameExist(String name) {
+        Job job = jobMapper.selectOne(new QueryWrapper<Job>().eq("name", name));
+        return job != null;
     }
 }

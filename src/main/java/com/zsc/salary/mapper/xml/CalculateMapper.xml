@@ -5,6 +5,7 @@
     <select id="listCalculateVo" resultType="com.zsc.salary.model.vo.CalculateVo" parameterType="Map">
         SELECT
             c.*,
+            e.name employee_name,
             d.name dept_name,
             j.name job_name
         FROM
