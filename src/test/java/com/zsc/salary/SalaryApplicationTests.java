@@ -20,4 +20,11 @@ import java.util.List;
 
 @SpringBootTest
 class SalaryApplicationTests {
+    @Resource
+    SalaryService salaryService;
+
+    @Test
+    public void test() {
+        salaryService.generateSalary(1, "2020-08");
+    }
 }

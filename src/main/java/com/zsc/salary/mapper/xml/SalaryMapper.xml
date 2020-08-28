@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zsc.salary.mapper.SalaryMapper">
+    <update id="updateSalaryStatus" parameterType="Map">
+        UPDATE salary SET status = 0 WHERE DATE_FORMAT( create_time, '%Y-%m' ) = #{time}
+            AND employee_id in
+        <foreach collection="employeeList" item="employee" open="(" separator="," close=")">
+            #{employee.id}
+        </foreach>
+    </update>
 
     <select id="listSalaryVo" resultType="com.zsc.salary.model.vo.SalaryVo" parameterType="Map">
         SELECT
@@ -212,4 +219,42 @@
         <result property="overtimePayTotal" column="overtimePayTotal"/>
     </resultMap>
 
+
+
+    <insert id="insertEmployeeSalary">
+        INSERT INTO salary (
+            employee_id,
+            import_id,
+            basic_salary,
+            personal_endowment_insurance,
+            company_endowment_insurance,
+            personal_unemployment_insurance,
+            personal_accumulation_fund,
+            company_accumulation_fund,
+            personal_medical_insurance,
+            company_medical_insurance,
+            personal_income_tax,
+            sick_leave_deduction,
+            personal_leave_deduction,
+            late_deduction,
+            overtime_pay,
+            back_pay,
+            net_pay,
+            should_pay,
+            status,
+            create_time,
+            modify_time
+        )
+        VALUES
+        <foreach collection ="salaryList" item="salary" separator =",">
+            (
+             #{salary.employeeId}, #{salary.importId}, #{salary.basicSalary},
+            #{salary.personalEndowmentInsurance}, #{salary.companyEndowmentInsurance}, #{salary.personalUnemploymentInsurance},
+            #{salary.personalAccumulationFund}, #{salary.companyAccumulationFund}, #{salary.personalMedicalInsurance},
+            #{salary.companyMedicalInsurance}, #{salary.personalIncomeTax}, #{salary.sickLeaveDeduction},
+            #{salary.personalLeaveDeduction}, #{salary.lateDeduction}, #{salary.overtimePay},
+            #{salary.backPay}, #{salary.netPay}, #{salary.shouldPay},#{salary.status}, NOW(), NOW()
+             )
+        </foreach >
+    </insert>
 </mapper>

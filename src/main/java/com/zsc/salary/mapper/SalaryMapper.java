@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.zsc.salary.model.vo.EmployeeSalaryVO;
 import com.zsc.salary.model.vo.SalaryDeptStatVO;
 import com.zsc.salary.model.vo.SalaryVo;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.math.BigDecimal;
@@ -58,6 +59,28 @@ public interface SalaryMapper extends BaseMapper<Salary> {
     Map<String, Object> getCompMonthlySalaryStat(Map<String, Object> queryMap);
 
     Map<String, Object> getCompYearlySalaryStat(Map<String, Object> queryMap);
+
+    /**
+     * 查询该部门在这个月内是否为暂存工资
+     * @param deptId 部门Id
+     * @param time 月份
+     * @return 查询到的数据 为0则代表没有暂存工资
+     */
+    @Select("SELECT COUNT(s.id) FROM salary s,employee e WHERE s.employee_id = e.id " +
+            "AND e.dept_id = #{deptId} AND s.status = 0 AND DATE_FORMAT( s.create_time, '%Y-%m' ) = #{time}")
+    Integer judgeIsStorage(Integer deptId, String time);
+
+    /**
+     * 批量增加员工工资结算
+     * @param salaryList 员工工资结算
+     */
+    void insertEmployeeSalary(@Param("salaryList") List<Salary> salaryList);
+
+    /**
+     * 发放工资
+     * @param map employeeList 对象 time 2020-08
+     */
+    void updateSalaryStatus(Map<String, Object> map);
 
     EmployeeSalaryVO getEmployeeSalaryStat(Integer employeeId);
 }

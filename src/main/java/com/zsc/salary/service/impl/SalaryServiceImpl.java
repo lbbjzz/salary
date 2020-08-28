@@ -1,12 +1,17 @@
 package com.zsc.salary.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sun.xml.bind.v2.TODO;
 import com.zsc.salary.mapper.CalculateMapper;
 import com.zsc.salary.mapper.EmployeeMapper;
 import com.zsc.salary.mapper.ImportMapper;
+import com.zsc.salary.model.dto.ImportDto;
+import com.zsc.salary.model.dto.UpdateSalaryDto;
+import com.zsc.salary.model.pojo.*;
 import com.zsc.salary.model.pojo.*;
 import com.zsc.salary.mapper.SalaryMapper;
 import com.zsc.salary.model.vo.EmployeeSalaryVO;
@@ -18,6 +23,7 @@ import com.zsc.salary.service.SalaryService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zsc.salary.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -25,15 +31,12 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author D
@@ -44,121 +47,58 @@ import java.util.stream.Collectors;
 public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> implements SalaryService {
 
     @Resource
-    SalaryMapper salaryMapper;
+    private SalaryMapper salaryMapper;
 
     @Resource
-    EmployeeMapper employeeMapper;
+    private EmployeeMapper employeeMapper;
 
     @Resource
-    ImportMapper importMapper;
+    private ImportMapper importMapper;
 
     @Resource
     private DeptService deptService;
 
     @Resource
-    CalculateMapper calculateMapper;
+    private CalculateMapper calculateMapper;
 
-    @Resource
-    RedisUtil redisUtil;
-
+    @Async
     @Override
-    public int addSalary(Integer importId) {
-        Calculate calculate = calculateMapper.selectById(1);
-        log.info(String.valueOf(calculate));
-        Import imported = importMapper.selectById(importId);
-        Integer employeeId = imported.getEmployeeId();
-        log.info(String.valueOf(imported));
-        //员工基本工资
-        BigDecimal basicSalary = employeeMapper.getEmployeeSalary(employeeId);
-        //个人支付养老保险
-        BigDecimal personalEndowmentInsurance = basicSalary.multiply(calculate.getPersonalEndowmentInsuranceRate());
-        log.info("个人支付养老保险" + personalEndowmentInsurance);
+    public void generateSalary(Integer deptId, String time) {
 
-        //公司支付养老保险医疗保险
-        BigDecimal companyEndowmentInsurance = basicSalary.multiply(calculate.getCompanyEndowmentInsuranceRate());
-        log.info("公司支付养老保险医疗保险" + companyEndowmentInsurance);
+        //查询部门全部的在职员工
+        List<Employee> employees = employeeMapper.selectList(new QueryWrapper<Employee>().eq("dept_id", deptId)
+                .eq("status", 1));
+        //存放全部员工的ID
+        Integer[] employeeIds = new Integer[employees.size()];
+        for (int i = 0; i < employees.size(); i++) {
+            employeeIds[i] = employees.get(i).getId();
+        }
+        System.out.println(Arrays.toString(employeeIds));
 
-        //个人支付失业保险
-        BigDecimal personalUnemploymentInsurance = basicSalary.multiply(calculate.getPersonalUnemploymentInsuranceRate());
-        log.info("个人支付失业保险" + personalUnemploymentInsurance);
+        //获取员工考勤数据
+        List<Import> imports = importMapper.getByEmployeeAndTime(employeeIds, time);
+        Collections.sort(imports);
+        imports.forEach(System.out::println);
 
-        //个人支付失业保险
-        BigDecimal personalAccumulationFund = basicSalary.multiply(calculate.getPersonalAccumulationFundRate());
-        log.info("个人支付失业保险" + personalAccumulationFund);
+        //获取员工计算属性
+        List<Calculate> calculateList = calculateMapper.listCalculate(employeeIds);
+        Collections.sort(calculateList);
+        calculateList.forEach(System.out::println);
 
-        //公司支付公积金
-        BigDecimal companyAccumulationFund = basicSalary.multiply(calculate.getCompanyAccumulationFundRate());
-        log.info("公司支付公积金" + companyAccumulationFund);
+        List<Salary> salaryList = new ArrayList<>(employeeIds.length);
 
-        //公司支付公积金
-        BigDecimal personalMedicalInsurance = basicSalary.multiply(calculate.getPersonalMedicalInsuranceRate());
-        log.info("公司支付公积金" + personalMedicalInsurance);
-
-        //公司支付医保
-        BigDecimal companyMedicalInsurance = basicSalary.multiply(calculate.getCompanyMedicalInsuranceRate());
-        log.info("公司支付医保" + companyMedicalInsurance);
-
-        //个人所得税
-        BigDecimal personalIncomeTax = basicSalary.multiply(calculate.getPersonalIncomeTaxRate());
-        log.info("个人所得税" + personalIncomeTax);
-
-
-
-        // 病假天数
-        int sickLeaveDay = imported.getSickLeaveDay();
-        log.info("病假天数" + sickLeaveDay);
-
-        // 事假天数
-        int personalLeaveDay = imported.getPersonalLeaveDay();
-        log.info("事假天数" + personalLeaveDay);
-
-        // 迟到次数
-        int lateDay = imported.getLateDay();
-        log.info("迟到次数" + lateDay);
-
-        // 加班天数
-        int overtimeDay = imported.getOvertimeDay();
-        log.info("加班天数" + overtimeDay);
-
-        //事假扣款
-        BigDecimal personalLeaveDeduction = BigDecimal.valueOf(personalLeaveDay).multiply(calculate.getDailyPersonalLeaveDeduction());
-        log.info("事假扣款" + personalLeaveDeduction);
-
-        //病假扣款
-        BigDecimal sickLeaveDeduction = basicSalary.multiply(calculate.getDailySickLeaveDeduction());
-        log.info("病假扣款" + sickLeaveDeduction);
-
-        //迟到扣款
-        BigDecimal lateDeduction = basicSalary.multiply(calculate.getDailyLateDeduction());
-        log.info("迟到扣款" + lateDeduction);
-
-        //加班工资
-        BigDecimal overtimePay = basicSalary.multiply(calculate.getDailyOvertimePay());
-        log.info("加班工资" + overtimePay);
-
-        //补发工资
-        BigDecimal backPay = imported.getBackPay();
-        log.info("补发工资" + backPay);
-
-        //应发工资
-        BigDecimal shouldPay = basicSalary.add(overtimePay).add(backPay);
-        log.info("应发工资" + shouldPay);
-
-        //实发工资
-        BigDecimal netPay = shouldPay.subtract(personalEndowmentInsurance).subtract(personalUnemploymentInsurance)
-                .subtract(personalAccumulationFund).subtract(sickLeaveDeduction)
-                .subtract(personalLeaveDeduction).subtract(lateDeduction);
-        log.info("实发工资" + netPay);
-
-        Salary salary = new Salary(employeeId, basicSalary, personalEndowmentInsurance,
-                companyEndowmentInsurance, personalUnemploymentInsurance,
-                personalAccumulationFund, companyAccumulationFund,
-                personalMedicalInsurance, companyMedicalInsurance,
-                personalIncomeTax, sickLeaveDeduction,
-                personalLeaveDeduction, lateDeduction,
-                overtimePay, backPay, netPay,
-                shouldPay);
-        return salaryMapper.insert(salary);
+        for (int i = 0; i < employeeIds.length; i++) {
+            //获取该员工的全部信息
+            Employee employee = employees.get(i);
+            //考勤数据
+            Import importing = imports.get(i);
+            //计算属性数据
+            Calculate calculate = calculateList.get(i);
+            Salary salary = calculateSalary(employee, importing, calculate);
+            salaryList.add(salary);
+        }
+        salaryList.forEach(System.out::println);
+        salaryMapper.insertEmployeeSalary(salaryList);
     }
 
     @Override
@@ -201,7 +141,7 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
     }
 
     @Override
-    public List<SalaryDeptStatVO> getDeptMonthlySalaryStat(String month){
+    public List<SalaryDeptStatVO> getDeptMonthlySalaryStat(String month) {
         List<Dept> deptList = deptService.allDept();
         List<SalaryDeptStatVO> salaryDeptStatVOList = new ArrayList<>();
         deptList.forEach(dept -> {
@@ -271,5 +211,131 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
         queryMap.put("queryDate", year);
 
         return salaryMapper.getCompYearlySalaryStat(queryMap);
+    }
+
+    @Override
+    public Boolean judgeIsStorage(Integer deptId, String time) {
+        Integer count = salaryMapper.judgeIsStorage(deptId, time);
+        return count != 0;
+    }
+
+    @Override
+    public void updateSalaryStorage(UpdateSalaryDto updateSalaryDto) {
+        importMapper.update(null, new UpdateWrapper<Import>()
+        .set("sick_leave_day", updateSalaryDto.getSickLeaveDay())
+        .set("personal_leave_day", updateSalaryDto.getPersonalLeaveDay())
+        .set("late_day", updateSalaryDto.getLateDay())
+        .set("overtime_day", updateSalaryDto.getOvertimeDay())
+        .set("back_pay", updateSalaryDto.getBackPay())
+        .eq("id", updateSalaryDto.getImportId()));
+
+        Employee employee = employeeMapper.selectById(updateSalaryDto.getEmployeeId());
+        Import importing = importMapper.selectById(updateSalaryDto.getImportId());
+        Calculate calculate = calculateMapper.selectOne(new QueryWrapper<Calculate>().eq("employee_id", updateSalaryDto.getEmployeeId()));
+        Salary salary = calculateSalary(employee, importing, calculate);
+        salary.setId(updateSalaryDto.getSalaryId());
+        salaryMapper.updateById(salary);
+    }
+
+    @Override
+    public void sendSalary(Integer deptId, String time) {
+        //查询部门全部的在职员工
+        List<Employee> employees = employeeMapper.selectList(new QueryWrapper<Employee>().eq("dept_id", deptId)
+                .eq("status", 1).select("id"));
+        log.error(String.valueOf(employees));
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("employeeList", employees);
+        map.put("time", time);
+        salaryMapper.updateSalaryStatus(map);
+    }
+
+    /**
+     * 封装了计算员工工资
+     * @param employee 员工信息
+     * @param importing 员工考勤信息
+     * @param calculate 员工计算项目的信息
+     * @return 计算后的员工工资表
+     */
+    private Salary calculateSalary(Employee employee, Import importing, Calculate calculate) {
+        //员工Id
+        Integer employeeId = employee.getId();
+        // 员工底薪
+        BigDecimal basicSalary = employeeMapper.getEmployeeSalary(employeeId);
+        log.info("员工底薪 = " + basicSalary);
+
+        // 采暖补贴
+        BigDecimal heatingSubsidy = employee.getHeatingSubsidy();
+        log.info("采暖补贴 = " + heatingSubsidy);
+
+        // 补发工资
+        BigDecimal backPay = importing.getBackPay();
+        log.info("补发工资 = " + backPay);
+
+        // 病假扣款
+        BigDecimal sickLeaveDeduction = calculate.getDailySickLeaveDeduction().multiply(BigDecimal.valueOf(importing.getSickLeaveDay()));
+        log.info("病假扣款 = " + sickLeaveDeduction);
+
+        // 事假扣款
+        BigDecimal personalLeaveDeduction = calculate.getDailyPersonalLeaveDeduction().multiply(BigDecimal.valueOf(importing.getPersonalLeaveDay()));
+        log.info("事假扣款 = " + personalLeaveDeduction);
+
+        // 迟到扣款
+        BigDecimal lateDeduction = calculate.getDailyLateDeduction().multiply(BigDecimal.valueOf(importing.getLateDay()));
+        log.info("迟到扣款 = " + lateDeduction);
+
+        // 加班工资
+        BigDecimal overtimePay = calculate.getDailyOvertimePay().multiply(BigDecimal.valueOf(importing.getOvertimeDay()));
+        log.info("加班工资 = " + overtimePay);
+
+        // 个人支付养老保险
+        BigDecimal personalEndowmentInsurance = calculate.getPersonalEndowmentInsuranceRate().multiply(basicSalary);
+        log.info("个人支付养老保险 = " + personalEndowmentInsurance);
+
+        // 公司支付养老保险医疗保险
+        BigDecimal companyEndowmentInsurance = calculate.getCompanyEndowmentInsuranceRate().multiply(basicSalary);
+        log.info("公司支付养老保险医疗保险 = " + companyEndowmentInsurance);
+
+        // 个人支付失业保险
+        BigDecimal personalUnemploymentInsurance = calculate.getPersonalUnemploymentInsuranceRate().multiply(basicSalary);
+        log.info("个人支付失业保险 = " + personalUnemploymentInsurance);
+
+        // 个人支付公积金
+        BigDecimal personalAccumulationFund = calculate.getPersonalAccumulationFundRate().multiply(basicSalary);
+        log.info("个人支付公积金 = " + personalAccumulationFund);
+
+        // 公司支付公积金
+        BigDecimal companyAccumulationFund = calculate.getPersonalAccumulationFundRate().multiply(basicSalary);
+        log.info("公司支付公积金 = " + companyAccumulationFund);
+
+        // 个人支付医保
+        BigDecimal personalMedicalInsurance = calculate.getPersonalMedicalInsuranceRate().multiply(basicSalary);
+        log.info("个人支付医保 = " + personalMedicalInsurance);
+
+        // 公司支付医保
+        BigDecimal companyMedicalInsurance = calculate.getCompanyMedicalInsuranceRate().multiply(basicSalary);
+        log.info("公司支付医保 = " + companyMedicalInsurance);
+
+        // 个人所得税
+        BigDecimal personalIncomeTax = calculate.getPersonalIncomeTaxRate().multiply(basicSalary);
+        log.info("个人所得税 = " + personalIncomeTax);
+
+        // 应发工资 (员工底薪, 补发工资, 加班工资, 采暖补贴)
+        BigDecimal shouldPay = basicSalary.add(backPay).add(overtimePay).add(heatingSubsidy);
+        log.info("应发工资 = " + shouldPay);
+
+        // 实发工资 (应发工资 - (个人支付养老保险, 个人支付失业保险, 个人支付公积金, 个人支付医保, 个人所得税
+        // , 病假扣款, 事假扣款, 迟到扣款))
+        BigDecimal netPay = shouldPay.subtract(personalEndowmentInsurance).subtract(personalUnemploymentInsurance)
+                .subtract(personalAccumulationFund).subtract(personalMedicalInsurance)
+                .subtract(personalIncomeTax).subtract(sickLeaveDeduction).subtract(personalLeaveDeduction)
+                .subtract(lateDeduction);
+        log.info("实发工资 = " + netPay);
+        Salary salary = new Salary(employeeId,importing.getId(),basicSalary,personalEndowmentInsurance,
+                companyEndowmentInsurance,personalUnemploymentInsurance,personalAccumulationFund,
+                companyAccumulationFund,personalMedicalInsurance,companyMedicalInsurance,
+                personalIncomeTax,sickLeaveDeduction,personalLeaveDeduction,lateDeduction,
+                overtimePay, backPay, netPay, shouldPay, 0);
+        log.info("工资信息 = "  + salary);
+        return salary;
     }
 }

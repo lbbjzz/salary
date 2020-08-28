@@ -30,7 +30,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="Calculate对象", description="")
-public class Calculate implements Serializable {
+public class Calculate implements Serializable,Comparable<Calculate>{
 
     private static final long serialVersionUID=1L;
 
@@ -102,4 +102,8 @@ public class Calculate implements Serializable {
     private LocalDateTime modifyTime;
 
 
+    @Override
+    public int compareTo(Calculate o) {
+        return this.employeeId - o.employeeId;
+    }
 }

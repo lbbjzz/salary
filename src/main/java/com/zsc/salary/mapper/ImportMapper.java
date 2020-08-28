@@ -5,6 +5,7 @@ import com.zsc.salary.model.pojo.Import;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.zsc.salary.model.vo.ImportVo;
 import io.swagger.models.auth.In;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 import java.util.Map;
@@ -63,4 +64,12 @@ public interface ImportMapper extends BaseMapper<Import> {
      * @param map 导入数据的ID数组
      */
     void deleteImportRepeat(Map<String, Object> map);
+
+    /**
+     * 获取员工在这个月的考勤表
+     * @param employeeId 员工Id数组
+     * @param time 月份 2020-08
+     * @return 考勤数据
+     */
+    List<Import> getByEmployeeAndTime(Integer[] employeeId, String time);
 }

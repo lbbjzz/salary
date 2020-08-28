@@ -109,15 +109,15 @@ public class Salary implements Serializable {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime modifyTime;
 
-    public Salary(Integer employeeId, BigDecimal basicSalary, BigDecimal personalEndowmentInsurance,
+    public Salary(Integer employeeId, Integer importId, BigDecimal basicSalary, BigDecimal personalEndowmentInsurance,
                   BigDecimal companyEndowmentInsurance, BigDecimal personalUnemploymentInsurance,
                   BigDecimal personalAccumulationFund, BigDecimal companyAccumulationFund,
                   BigDecimal personalMedicalInsurance, BigDecimal companyMedicalInsurance,
                   BigDecimal personalIncomeTax, BigDecimal sickLeaveDeduction,
-                  BigDecimal personalLeaveDeduction, BigDecimal lateDeduction,
-                  BigDecimal overtimePay, BigDecimal backPay, BigDecimal netPay,
-                  BigDecimal shouldPay) {
+                  BigDecimal personalLeaveDeduction, BigDecimal lateDeduction, BigDecimal overtimePay,
+                  BigDecimal backPay, BigDecimal netPay, BigDecimal shouldPay, Integer status) {
         this.employeeId = employeeId;
+        this.importId = importId;
         this.basicSalary = basicSalary;
         this.personalEndowmentInsurance = personalEndowmentInsurance;
         this.companyEndowmentInsurance = companyEndowmentInsurance;
@@ -134,5 +134,6 @@ public class Salary implements Serializable {
         this.backPay = backPay;
         this.netPay = netPay;
         this.shouldPay = shouldPay;
+        this.status = status;
     }
 }

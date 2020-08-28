@@ -152,4 +152,11 @@
         </choose>
         AND e.dept_id = d.id
     </select>
+    <select id="getByEmployeeAndTime" resultType="com.zsc.salary.model.pojo.Import">
+        SELECT * FROM import WHERE DATE_FORMAT( create_time, '%Y-%m' ) = #{time}
+                               AND employee_id in
+        <foreach collection="employeeId" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
 </mapper>

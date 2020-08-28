@@ -38,6 +38,9 @@ public class SalaryVo {
     @ApiModelProperty(value = "员工姓名")
     private String employeeName;
 
+    @ApiModelProperty(value = "员工考勤表ID")
+    private Integer importId;
+
     @ApiModelProperty(value = "员工部门ID")
     private Integer deptId;
 

@@ -32,7 +32,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="Import对象", description="")
-public class Import implements Serializable {
+public class Import implements Serializable, Comparable<Import>{
 
     private static final long serialVersionUID=1L;
 
@@ -75,4 +75,8 @@ public class Import implements Serializable {
     private LocalDateTime modifyTime;
 
 
+    @Override
+    public int compareTo(Import o) {
+        return this.employeeId - o.employeeId;
+    }
 }

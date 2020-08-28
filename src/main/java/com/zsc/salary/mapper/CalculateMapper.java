@@ -4,6 +4,7 @@ import com.zsc.salary.model.dto.CalculateDto;
 import com.zsc.salary.model.pojo.Calculate;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.zsc.salary.model.vo.CalculateVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -30,5 +31,12 @@ public interface CalculateMapper extends BaseMapper<Calculate> {
      * @param calculateDto 包含更新的数据
      */
     void updateCalculate(CalculateDto calculateDto);
+
+    /**
+     * 获取员工的计算属性
+     * @param employeeId 员工Id数组
+     * @return 员工计算属性
+     */
+    List<Calculate> listCalculate(@Param("employeeId") Integer[] employeeId);
 
 }

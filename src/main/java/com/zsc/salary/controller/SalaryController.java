@@ -2,6 +2,8 @@ package com.zsc.salary.controller;
 
 
 import com.zsc.salary.bean.GlobalResponse;
+import com.zsc.salary.model.dto.ImportDto;
+import com.zsc.salary.model.dto.UpdateSalaryDto;
 import com.zsc.salary.model.vo.EmployeeSalaryVO;
 import com.zsc.salary.model.vo.SalaryDeptStatVO;
 import com.zsc.salary.service.SalaryService;
@@ -35,13 +37,6 @@ public class SalaryController {
     @Resource
     SalaryService salaryService;
 
-    @PostMapping("/insertSalary")
-    public GlobalResponse insertSalary(Integer importId) {
-        System.out.println(importId);
-        int flag = salaryService.addSalary(importId);
-        return GlobalResponse.success();
-    }
-
     @ApiOperation(value = "查询发放的工资", notes = "pageNo pageSize为分页 deptId为查询的部门Id 0为显示全部 time为查询的月份 0 为不查询")
     @GetMapping("/listSalaryVO")
     public GlobalResponse listSalaryVO(@RequestParam Integer pageNo,
@@ -57,8 +52,13 @@ public class SalaryController {
         if (!"0".equals(time)) {
             map.put("time", time);
         }
+
         log.error(String.valueOf(map));
         Map<String, Object> result = salaryService.listSalaryVo(map);
+        if (deptId != 0 && !"0".equals(time)) {
+            Boolean flag = salaryService.judgeIsStorage(deptId, time);
+            result.put("isStorage", flag);
+        }
         if (map.isEmpty()) {
             return GlobalResponse.failed();
         }
@@ -169,6 +169,31 @@ public class SalaryController {
         Boolean isSend = salaryService.judgeSendSalary(deptId, time);
         return GlobalResponse.success().data("isSend", isSend);
     }
+
+    @ApiOperation(value = "给部门指定月份发放工资")
+    @PostMapping("/generateSalary")
+    public GlobalResponse generateSalary(Integer deptId, String time){
+        salaryService.generateSalary(deptId, time);
+        return GlobalResponse.success();
+    }
+
+    @ApiOperation(value = "编辑暂存的工资")
+    @PostMapping("/updateSalaryStorage")
+    public GlobalResponse updateSalaryStorage(@RequestBody UpdateSalaryDto updateSalaryDto){
+        log.error(String.valueOf(updateSalaryDto));
+        salaryService.updateSalaryStorage(updateSalaryDto);
+        return GlobalResponse.success();
+    }
+
+    @ApiOperation(value = "发放工资，将暂存的工资状态改为发放")
+    @PostMapping("/sendSalary")
+    public GlobalResponse sendSalary(Integer deptId, String time){
+        log.error(String.valueOf(deptId));
+        log.error(String.valueOf(time));
+        salaryService.sendSalary(deptId, time);
+        return GlobalResponse.success();
+    }
+
 
     @GetMapping("/getEmployeeSalaryStat")
     public GlobalResponse getEmployeeSalaryStat() {

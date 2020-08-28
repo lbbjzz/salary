@@ -1,13 +1,12 @@
 package com.zsc.salary.service;
 
+import com.zsc.salary.model.dto.ImportDto;
+import com.zsc.salary.model.dto.UpdateSalaryDto;
 import com.zsc.salary.model.pojo.Salary;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.zsc.salary.model.vo.EmployeeSalaryVO;
 import com.zsc.salary.model.vo.SalaryDeptStatVO;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -22,12 +21,12 @@ import java.util.Map;
 public interface SalaryService extends IService<Salary> {
 
     /**
-     * 生成员工详细工资
+     * 生成指定部门指定月份的员工详细工资
      *
-     * @param importId 导入的数据
-     * @return 影响行数
+     * @param deptId 部门的Id
+     * @param time   生成哪个月份的工资
      */
-    int addSalary(Integer importId);
+    void generateSalary(Integer deptId, String time);
 
 
     /**
@@ -42,6 +41,7 @@ public interface SalaryService extends IService<Salary> {
 
     /**
      * 查询所有部门的月度工资统计信息
+     *
      * @param month 查询月份
      * @return 月度统计信息List<SalaryDeptStatVO>
      */
@@ -49,7 +49,8 @@ public interface SalaryService extends IService<Salary> {
 
     /**
      * 根据id获取部门月度工资统计信息
-     * @param month 查询月份
+     *
+     * @param month  查询月份
      * @param deptId 查询的部门id
      * @return 月度统计信息SalaryDeptStatVO
      */
@@ -57,7 +58,8 @@ public interface SalaryService extends IService<Salary> {
 
     /**
      * 根据id查询部门的年度度工资统计信息
-     * @param year 查询年份
+     *
+     * @param year   查询年份
      * @param deptId 查询的部门id
      * @return 年度统计信息SalaryDeptStatVO
      */
@@ -65,6 +67,7 @@ public interface SalaryService extends IService<Salary> {
 
     /**
      * 查询所有部门的年度工资统计信息
+     *
      * @param year 查询年份
      * @return 年度统计信息List<SalaryDeptStatVO>
      */
@@ -76,11 +79,38 @@ public interface SalaryService extends IService<Salary> {
 
     /**
      * 查询该部门在今年该月是否发放了工资
+     *
      * @param deptId 部门Id
-     * @param time 月份
+     * @param time   月份
      * @return true表示已经发放工资 false表示未发放工资
      */
     Boolean judgeSendSalary(Integer deptId, String time);
+
+
+    /**
+     * 查询该部门在今年该月是否为暂存
+     *
+     * @param deptId 部门Id
+     * @param time   月份
+     * @return true表示已经发放工资 false表示未发放工资
+     */
+    Boolean judgeIsStorage(Integer deptId, String time);
+
+    /**
+     * 编辑员工的暂存工资
+     *
+     * @param updateSalaryDto 修改员工暂存工资项目
+     */
+    void updateSalaryStorage(UpdateSalaryDto updateSalaryDto);
+
+    /**
+     * 发放工资
+     * 更新员工的工资状态
+     *
+     * @param deptId 部门Id
+     * @param time   时间 2020-08
+     */
+    void sendSalary(Integer deptId, String time);
 
     List<EmployeeSalaryVO> getEmployeeSalaryStat();
 }
