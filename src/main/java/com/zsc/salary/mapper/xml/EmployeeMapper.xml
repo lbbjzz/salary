@@ -9,7 +9,7 @@
             d.name dept_name,
             j.name job_name,
             e.sex,
-            e.birth,
+            TIMESTAMPDIFF(YEAR,birth,CURDATE()) age,
             e.education,
             e.id_card,
             e.status
@@ -49,7 +49,7 @@
         <result property="deptName" column="dept_name"/>
         <result property="jobName" column="job_name"/>
         <result property="sex" column="sex"/>
-        <result property="birth" column="birth"/>
+        <result property="age" column="age"/>
         <result property="education" column="education"/>
         <result property="idCard" column="id_card"/>
         <result property="status" column="status"/>

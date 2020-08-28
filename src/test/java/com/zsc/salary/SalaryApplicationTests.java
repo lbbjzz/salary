@@ -2,12 +2,13 @@ package com.zsc.salary;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zsc.salary.mapper.EmployeeMapper;
-import com.zsc.salary.model.data.UploadData;
 import com.zsc.salary.model.pojo.Employee;
 import com.zsc.salary.model.pojo.Import;
 import com.zsc.salary.model.vo.EmployeeFixedSalaryVo;
+import com.zsc.salary.model.vo.SalaryDeptStatVO;
 import com.zsc.salary.service.CalculateService;
 import com.zsc.salary.service.EmployeeService;
+import com.zsc.salary.service.SalaryService;
 import com.zsc.salary.service.ImportService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +26,9 @@ class SalaryApplicationTests {
 
     @Resource
     private EmployeeService employeeService;
+
+    @Resource
+    private SalaryService salaryService;
 
     @Resource
     private CalculateService calculateService;

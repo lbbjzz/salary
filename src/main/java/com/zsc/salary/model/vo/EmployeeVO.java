@@ -32,8 +32,8 @@ public class EmployeeVO {
     @ApiModelProperty(value = "性别")
     private Boolean sex;
 
-    @ApiModelProperty(value = "生日")
-    private Date birth;
+    @ApiModelProperty(value = "年龄")
+    private String age;
 
     @ApiModelProperty(value = "学历")
     private String education;

@@ -49,23 +49,56 @@
         <result property="modifyTime" column="modify_time"/>
     </resultMap>
 
-    <select id="getMaxSalary" parameterType="Map" resultMap="salaryStat">
+    <select id="getMonthlySalaryStatByDeptId" parameterType="Map" resultMap="salaryStat">
         select
+            d.id deptId,
+            d.name deptName,
+            #{queryDate} queryDate,
+            SUM(s.net_pay) sumSalary,
             MAX(s.net_pay) maxSalary,
             MIN(s.net_pay) minSalary,
             AVG(s.net_pay) avgSalary
         from
             salary s,
-            employee e
+            employee e,
+            dept d
         where
-            DATE_FORMAT(s.create_time, '%Y-%m') = DATE_FORMAT(#{dateTime}, '%Y-%m')
+            DATE_FORMAT(s.create_time, '%Y-%m') = #{queryDate}
             and
             s.employee_id = e.id
             and
             e.dept_id = #{deptId}
+            and
+            e.dept_id = d.id
     </select>
 
-    <resultMap id="salaryStat" type="map">
+    <select id="getYearlySalaryStatByDeptId" parameterType="Map" resultMap="salaryStat">
+        select
+            d.id deptId,
+            d.name deptName,
+            DATE_FORMAT(#{dateTime}, '%Y') queryDate,
+            SUM(s.net_pay) sumSalary,
+            MAX(s.net_pay) maxSalary,
+            MIN(s.net_pay) minSalary,
+            AVG(s.net_pay) avgSalary
+        from
+            salary s,
+            employee e,
+            dept d
+        where
+            DATE_FORMAT(s.create_time, '%Y') = #{queryDate}
+            and
+            s.employee_id = e.id
+            and
+            e.dept_id = #{deptId}
+            and
+            e.dept_id = d.id
+    </select>
+
+    <resultMap id="salaryStat" type="com.zsc.salary.model.vo.SalaryDeptStatVO">
+        <result property="deptId" column="deptId"/>
+        <result property="deptName" column="deptName"/>
+        <result property="queryDate" column="queryDate"/>
         <result property="maxSalary" column="maxSalary"/>
         <result property="minSalary" column="minSalary"/>
         <result property="avgSalary" column="avgSalary"/>

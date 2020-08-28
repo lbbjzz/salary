@@ -2,15 +2,19 @@ package com.zsc.salary.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sun.xml.bind.v2.TODO;
 import com.zsc.salary.mapper.CalculateMapper;
 import com.zsc.salary.mapper.EmployeeMapper;
 import com.zsc.salary.mapper.ImportMapper;
 import com.zsc.salary.model.pojo.Calculate;
+import com.zsc.salary.model.pojo.Dept;
 import com.zsc.salary.model.pojo.Import;
 import com.zsc.salary.model.pojo.Salary;
 import com.zsc.salary.mapper.SalaryMapper;
 import com.zsc.salary.model.vo.EmployeeVO;
+import com.zsc.salary.model.vo.SalaryDeptStatVO;
 import com.zsc.salary.model.vo.SalaryVo;
+import com.zsc.salary.service.DeptService;
 import com.zsc.salary.service.SalaryService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -19,10 +23,13 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -44,6 +51,9 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
 
     @Resource
     ImportMapper importMapper;
+
+    @Resource
+    private DeptService deptService;
 
     @Resource
     CalculateMapper calculateMapper;
@@ -160,17 +170,49 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
     }
 
     @Override
-    public Map<String, Object> getSalaryStat(LocalDateTime dateTime, Integer deptId) {
-        if (dateTime == null || deptId == null) {
+    public SalaryDeptStatVO getMonthlySalaryStatByDeptId(String month, Integer deptId) {
+        if (month == null || deptId == null) {
             throw new RuntimeException("查询数据为空，查询失败");
         }
         Map<String, Object> queryMap = new HashMap<>(2);
-        queryMap.put("dateTime", dateTime);
+        queryMap.put("queryDate", month);
         queryMap.put("deptId", deptId);
 
-        Map<String, Object> salary = salaryMapper.getMaxSalary(queryMap);
+        return salaryMapper.getMonthlySalaryStatByDeptId(queryMap);
 
-        System.out.println(salary);
-        return salary;
+    }
+
+    @Override
+    public List<SalaryDeptStatVO> getMonthlySalaryStat(String month){
+        List<Dept> deptList = deptService.allDept();
+        List<SalaryDeptStatVO> salaryDeptStatVOList = new ArrayList<>();
+        deptList.forEach(dept -> {
+            SalaryDeptStatVO salaryDeptStatVO = this.getMonthlySalaryStatByDeptId(month, dept.getId());
+            salaryDeptStatVOList.add(salaryDeptStatVO);
+        });
+        return salaryDeptStatVOList;
+    }
+
+    @Override
+    public SalaryDeptStatVO getYearlySalaryStatByDeptId(String year, Integer deptId) {
+        if (year == null || deptId == null) {
+            throw new RuntimeException("查询数据为空，查询失败");
+        }
+        Map<String, Object> queryMap = new HashMap<>(2);
+        queryMap.put("queryDate", year);
+        queryMap.put("deptId", deptId);
+
+        return salaryMapper.getYearlySalaryStatByDeptId(queryMap);
+    }
+
+    @Override
+    public List<SalaryDeptStatVO> getYearlySalaryStat(String year) {
+        List<Dept> deptList = deptService.allDept();
+        List<SalaryDeptStatVO> salaryDeptStatVOList = new ArrayList<>();
+        deptList.forEach(dept -> {
+            SalaryDeptStatVO salaryDeptStatVO = this.getYearlySalaryStatByDeptId(year, dept.getId());
+            salaryDeptStatVOList.add(salaryDeptStatVO);
+        });
+        return salaryDeptStatVOList;
     }
 }

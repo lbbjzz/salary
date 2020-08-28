@@ -2,6 +2,7 @@ package com.zsc.salary.mapper;
 
 import com.zsc.salary.model.pojo.Salary;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.zsc.salary.model.vo.SalaryDeptStatVO;
 import com.zsc.salary.model.vo.SalaryVo;
 
 import java.math.BigDecimal;
@@ -25,10 +26,13 @@ public interface SalaryMapper extends BaseMapper<Salary> {
      */
     List<SalaryVo> listSalaryVo();
 
-    Map<String, Object> getMaxSalary(Map<String, Object> queryMap);
+    /**
+     * 获取部门月度工资统计信息
+     * @param queryMap 查询条件
+     * @return 月度统计信息Map
+     */
+    SalaryDeptStatVO getMonthlySalaryStatByDeptId(Map<String, Object> queryMap);
 
-    BigDecimal getMinSalary(Map<String, Object> queryMap);
-
-    BigDecimal getAvgSalary(Map<String, Object> queryMap);
+    SalaryDeptStatVO getYearlySalaryStatByDeptId(Map<String, Object> queryMap);
 
 }
