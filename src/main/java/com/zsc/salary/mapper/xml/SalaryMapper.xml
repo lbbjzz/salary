@@ -38,6 +38,51 @@
         </choose>
     </select>
 
+    <select id="listSalaryVoDetail" resultType="com.zsc.salary.model.vo.SalaryVo" parameterType="Map">
+        SELECT
+        s.*,
+        i.*,
+        e.heating_subsidy,
+        e.name employee_name,
+        j.id job_id,
+        j.name job_name,
+        d.id dept_id,
+        d.name dept_name
+        FROM
+        salary s,
+        employee e,
+        job j,
+        dept d,
+        import i
+        WHERE
+        s.employee_id = e.id
+        AND s.import_id = i.id
+        AND e.job_id = j.id
+        AND e.status = 1
+        AND e.dept_id = d.id
+        <choose>
+            <when test="beginDate != null and endDate != null and deptName != null">
+                AND DATE_FORMAT(s.create_time, '%Y-%m') &gt;= #{beginDate}
+                AND DATE_FORMAT(s.create_time, '%Y-%m') &lt;= #{endDate}
+                AND d.name LIKE CONCAT('%', #{deptName}, '%')
+            </when>
+            <when test="beginDate != null and deptName != null">
+                AND DATE_FORMAT(s.create_time, '%Y-%m') = #{beginDate}
+                AND d.name LIKE CONCAT('%', #{deptName}, '%')
+            </when>
+            <when test="beginDate != null and endDate != null">
+                AND DATE_FORMAT(s.create_time, '%Y-%m') &gt;= #{beginDate}
+                AND DATE_FORMAT(s.create_time, '%Y-%m') &lt;= #{endDate}
+            </when>
+            <when test="beginDate != null">
+                AND DATE_FORMAT(s.create_time, '%Y-%m') = #{beginDate}
+            </when>
+            <when test="deptName != null">
+                AND d.name LIKE CONCAT('%', #{deptName}, '%')
+            </when>
+        </choose>
+    </select>
+
     <select id="getDeptMonthlySalaryStatById" parameterType="Map" resultMap="salaryStat">
         select
             d.id deptId,
@@ -87,6 +132,47 @@
         <result property="deptId" column="deptId"/>
         <result property="deptName" column="deptName"/>
         <result property="queryDate" column="queryDate"/>
+        <result property="sumSalary" column="sumSalary"/>
+        <result property="maxSalary" column="maxSalary"/>
+        <result property="minSalary" column="minSalary"/>
+        <result property="avgSalary" column="avgSalary"/>
+    </resultMap>
+
+    <select id="getCompMonthlySalaryStat" parameterType="map" resultMap="companySalaryStat">
+        SELECT
+            #{queryDate} queryDate,
+	        SUM(s.net_pay) sumSalary,
+	        max(s.net_pay) maxSalary,
+	        MIN(s.net_pay) minSalary,
+	        AVG(s.net_pay) avgSalary
+        FROM
+	        salary s,
+	        employee e
+        WHERE
+	        s.employee_id = e.id
+	        AND
+	        DATE_FORMAT(s.create_time, '%Y-%m') = #{queryDate}
+    </select>
+
+    <select id="getCompYearlySalaryStat" parameterType="map" resultMap="companySalaryStat">
+        SELECT
+            #{queryDate} queryDate,
+	        SUM(s.net_pay) sumSalary,
+	        max(s.net_pay) maxSalary,
+	        MIN(s.net_pay) minSalary,
+	        AVG(s.net_pay) avgSalary
+        FROM
+	        salary s,
+	        employee e
+        WHERE
+	        s.employee_id = e.id
+	        AND
+	        DATE_FORMAT(s.create_time, '%Y') = #{queryDate}
+    </select>
+
+    <resultMap id="companySalaryStat" type="map">
+        <result property="queryDate" column="queryDate"/>
+        <result property="sumSalary" column="sumSalary"/>
         <result property="maxSalary" column="maxSalary"/>
         <result property="minSalary" column="minSalary"/>
         <result property="avgSalary" column="avgSalary"/>

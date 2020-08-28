@@ -27,13 +27,21 @@ public interface SalaryMapper extends BaseMapper<Salary> {
      */
     List<SalaryVo> listSalaryVo(Map<String, Object> map);
 
+
+    List<SalaryVo> listSalaryVoDetail(Map<String, Object> map);
+
     /**
      * 获取部门月度工资统计信息
-     * @param queryMap 查询条件
+     * @param queryMap 查询条件，queryDate查询月份，deptId查询部门id
      * @return 月度统计信息Map
      */
     SalaryDeptStatVO getDeptMonthlySalaryStatById(Map<String, Object> queryMap);
 
+    /**
+     * 获取部门年度工资统计信息
+     * @param queryMap 查询条件，queryDate查询年份，deptId查询部门id
+     * @return 年度统计信息Map
+     */
     SalaryDeptStatVO getDeptYearlySalaryStatById(Map<String, Object> queryMap);
 
     /**
@@ -45,5 +53,9 @@ public interface SalaryMapper extends BaseMapper<Salary> {
     @Select("SELECT COUNT(s.id) FROM salary s,employee e WHERE s.employee_id = e.id " +
             "AND e.dept_id = #{deptId} AND DATE_FORMAT( s.create_time, '%Y-%m' ) = #{time}")
     Integer isSendSalary(Integer deptId, String time);
+
+    Map<String, Object> getCompMonthlySalaryStat(Map<String, Object> queryMap);
+
+    Map<String, Object> getCompYearlySalaryStat(Map<String, Object> queryMap);
 
 }

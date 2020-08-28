@@ -37,6 +37,8 @@ public interface SalaryService extends IService<Salary> {
      */
     Map<String, Object> listSalaryVo(Map<String, Object> map);
 
+    Map<String, Object> listSalaryVoDetail(Map<String, Object> map);
+
     /**
      * 查询所有部门的月度工资统计信息
      * @param month 查询月份
@@ -66,6 +68,10 @@ public interface SalaryService extends IService<Salary> {
      * @return 年度统计信息List<SalaryDeptStatVO>
      */
     List<SalaryDeptStatVO> getDeptYearlySalaryStat(String year);
+
+    Map<String, Object> getCompMonthlySalaryStat(String month);
+
+    Map<String, Object> getCompYearlySalaryStat(String year);
 
     /**
      * 查询该部门在今年该月是否发放了工资

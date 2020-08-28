@@ -42,11 +42,11 @@ public class SalaryController {
     }
 
     @ApiOperation(value = "查询发放的工资", notes = "pageNo pageSize为分页 deptId为查询的部门Id 0为显示全部 time为查询的月份 0 为不查询")
-    @GetMapping("/listSalaryVO/{pageNo}/{pageSize}/{deptId}/{time}")
-    public GlobalResponse listSalaryVO(@PathVariable("pageNo") Integer pageNo,
-                                         @PathVariable("pageSize") Integer pageSize,
-                                         @PathVariable("deptId") Integer deptId,
-                                         @PathVariable("time") String time) {
+    @GetMapping("/listSalaryVO")
+    public GlobalResponse listSalaryVO(@RequestParam Integer pageNo,
+                                       @RequestParam Integer pageSize,
+                                       @RequestParam Integer deptId,
+                                       @RequestParam String time) {
         Map<String, Object> map = new HashMap<>(4);
         map.put("pageNo", pageNo);
         map.put("pageSize", pageSize);
@@ -54,10 +54,39 @@ public class SalaryController {
             map.put("deptId", deptId);
         }
         if (!"0".equals(time)) {
-            map.put("time", getYearMonth(time));
+            map.put("time", time);
         }
         log.error(String.valueOf(map));
         Map<String, Object> result = salaryService.listSalaryVo(map);
+        if (map.isEmpty()) {
+            return GlobalResponse.failed();
+        }
+        return GlobalResponse.success().data(result);
+    }
+
+    @ApiOperation(value = "工资查询报表", notes = "pageNo，pageSize为分页，beginTime为开始日期(-1为不查询)，endTime为结束日期(-1为不查询)，deptName为部门名(-1为不查询)")
+    @GetMapping("/listSalaryVoDetail")
+    public GlobalResponse listSalaryVoDetail(@RequestParam Integer pageNo,
+                                             @RequestParam Integer pageSize,
+                                             @RequestParam String beginDate,
+                                             @RequestParam String endDate,
+                                             @RequestParam String deptName) {
+        Map<String, Object> map = new HashMap<>(5);
+        map.put("pageNo", pageNo);
+        map.put("pageSize", pageSize);
+
+        if (!"-1".equals(beginDate)) {
+            map.put("beginDate", beginDate);
+        }
+        if (!"-1".equals(endDate)) {
+            map.put("endDate", endDate);
+        }
+        if (!"-1".equals(deptName)) {
+            map.put("deptName", deptName);
+        }
+
+        log.error(String.valueOf(map));
+        Map<String, Object> result = salaryService.listSalaryVoDetail(map);
         if (map.isEmpty()) {
             return GlobalResponse.failed();
         }
@@ -72,7 +101,7 @@ public class SalaryController {
         if (salary == null) {
             return GlobalResponse.failed().message("查询失败");
         }
-        return GlobalResponse.success().data("salaryStat", salary);
+        return GlobalResponse.success().data("salaryStat", salary).message("查询成功");
     }
 
     @ApiOperation(value = "查询所有部门的月度最高、最低、平均工资", notes = "按月份查询")
@@ -83,7 +112,7 @@ public class SalaryController {
         if (salary == null) {
             return GlobalResponse.failed().message("查询失败");
         }
-        return GlobalResponse.success().data("listSalaryStat", salary);
+        return GlobalResponse.success().data("listSalaryStat", salary).message("查询成功");
     }
 
     @ApiOperation(value = "根据id查询部门年度最高、最低、平均工资", notes = "按年份和部门查询")
@@ -94,7 +123,7 @@ public class SalaryController {
         if (salary == null) {
             return GlobalResponse.failed().message("查询失败");
         }
-        return GlobalResponse.success().data("salaryStat", salary);
+        return GlobalResponse.success().data("salaryStat", salary).message("查询成功");
     }
 
     @ApiOperation(value = "查询所有部门的年度最高、最低、平均工资", notes = "按年份查询")
@@ -105,7 +134,29 @@ public class SalaryController {
         if (salary == null) {
             return GlobalResponse.failed().message("查询失败");
         }
-        return GlobalResponse.success().data("listSalaryStat", salary);
+        return GlobalResponse.success().data("listSalaryStat", salary).message("查询成功");
+    }
+
+    @ApiOperation(value = "查询公司的月度最高、最低、平均工资", notes = "按月份查询")
+    @GetMapping("/getCompMonthlySalaryStat")
+    public GlobalResponse getCompMonthlySalaryStat(@RequestParam String month){
+        Map<String, Object> salary = salaryService.getCompMonthlySalaryStat(month);
+
+        if (salary == null) {
+            return GlobalResponse.failed().message("查询失败");
+        }
+        return GlobalResponse.success().data(salary).message("查询成功");
+    }
+
+    @ApiOperation(value = "查询公司的年度最高、最低、平均工资", notes = "按年份查询")
+    @GetMapping("/getCompYearlySalaryStat")
+    public GlobalResponse getCompYearlySalaryStat(@RequestParam String year){
+        Map<String, Object> salary = salaryService.getCompYearlySalaryStat(year);
+
+        if (salary == null) {
+            return GlobalResponse.failed().message("查询失败");
+        }
+        return GlobalResponse.success().data(salary).message("查询成功");
     }
 
     @ApiOperation(value = "判断部门在该月是否发放了工资")
@@ -114,14 +165,8 @@ public class SalaryController {
                                           @PathVariable(value = "time") String time){
         log.error(String.valueOf(deptId));
         log.error(time);
-        Boolean isSend = salaryService.judgeSendSalary(deptId, getYearMonth(time));
+        Boolean isSend = salaryService.judgeSendSalary(deptId, time);
         return GlobalResponse.success().data("isSend", isSend);
-    }
-
-    private String getYearMonth(String month) {
-        LocalDateTime nowTime = LocalDateTime.now();
-        String year = String.valueOf(nowTime.getYear());
-        return year + "-" + month;
     }
 }
 

@@ -102,7 +102,7 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
         //个人所得税
         BigDecimal personalIncomeTax = basicSalary.multiply(calculate.getPersonalIncomeTaxRate());
         log.info("个人所得税" + personalIncomeTax);
-        
+
 
 
         // 病假天数
@@ -176,6 +176,19 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
     }
 
     @Override
+    public Map<String, Object> listSalaryVoDetail(Map<String, Object> map) {
+        Integer pageNo = (Integer) map.get("pageNo");
+        Integer pageSize = (Integer) map.get("pageSize");
+        Map<String, Object> result = new HashMap<>(2);
+        PageHelper.startPage(pageNo, pageSize);
+        List<SalaryVo> salaryVoList = salaryMapper.listSalaryVoDetail(map);
+        PageInfo<SalaryVo> pageInfo = new PageInfo<>(salaryVoList);
+        result.put("salaryVoList", salaryVoList);
+        result.put("total", pageInfo.getTotal());
+        return result;
+    }
+
+    @Override
     public SalaryDeptStatVO getDeptMonthlySalaryStatById(String month, Integer deptId) {
         if (month == null || deptId == null) {
             throw new RuntimeException("查询数据为空，查询失败");
@@ -226,5 +239,27 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
     public Boolean judgeSendSalary(Integer deptId, String time) {
         Integer count = salaryMapper.isSendSalary(deptId, time);
         return count != 0;
+    }
+
+    @Override
+    public Map<String, Object> getCompMonthlySalaryStat(String month) {
+        if (month == null) {
+            throw new RuntimeException("查询数据为空，查询失败");
+        }
+        Map<String, Object> queryMap = new HashMap<>(2);
+        queryMap.put("queryDate", month);
+
+        return salaryMapper.getCompMonthlySalaryStat(queryMap);
+    }
+
+    @Override
+    public Map<String, Object> getCompYearlySalaryStat(String year) {
+        if (year == null) {
+            throw new RuntimeException("查询数据为空，查询失败");
+        }
+        Map<String, Object> queryMap = new HashMap<>(2);
+        queryMap.put("queryDate", year);
+
+        return salaryMapper.getCompYearlySalaryStat(queryMap);
     }
 }
