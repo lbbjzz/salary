@@ -1,9 +1,14 @@
 package com.zsc.salary.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.zsc.salary.mapper.CalculateMapper;
+import com.zsc.salary.mapper.ImportMapper;
 import com.zsc.salary.mapper.JobMapper;
+import com.zsc.salary.model.data.UploadData;
 import com.zsc.salary.model.dto.EmployeeDTO;
+import com.zsc.salary.model.pojo.Calculate;
 import com.zsc.salary.model.pojo.Dept;
 import com.zsc.salary.model.pojo.Employee;
 import com.zsc.salary.mapper.EmployeeMapper;
@@ -38,6 +43,12 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     private EmployeeMapper employeeMapper;
 
     @Resource
+    private CalculateMapper calculateMapper;
+
+    @Resource
+    private ImportMapper importMapper;
+
+    @Resource
     private JobService jobService;
 
     @Resource
@@ -54,6 +65,23 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     @Override
     public void insert(Employee employee) {
         employeeMapper.insert(employee);
+        //插入员工的计算项目
+        Calculate calculate = new Calculate();
+        calculate.setEmployeeId(employee.getId());
+        while (true) {
+            if (calculateMapper.insert(calculate) == 1) {
+                break;
+            }
+        }
+        //增加员工每月的考勤表
+        UploadData uploadData = new UploadData();
+        uploadData.setBackPay(0);
+        uploadData.setLateDay(0);
+        uploadData.setOvertimeDay(0);
+        uploadData.setSickLeaveDay(0);
+        uploadData.setPersonalLeaveDay(0);
+        uploadData.setEmployeeId(employee.getId());
+        importMapper.insertImport(uploadData);
     }
 
     @Override
@@ -156,6 +184,12 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     public void addHeatingSubsidy(Integer[] employeeId, BigDecimal heatingSubsidy) {
         Map<String, Object> map = returnHeatingSubsidyMap(employeeId, heatingSubsidy);
         employeeMapper.addHeatingSubsidy(map);
+    }
+
+    @Override
+    public List<Employee> getEmployeeId() {
+        List<Employee> employeeList = employeeMapper.selectList(new QueryWrapper<Employee>().eq("status", 1).select("id"));
+        return employeeList;
     }
 
     private Map<String, Object> returnHeatingSubsidyMap(Integer[] employeeId, BigDecimal heatingSubsidy) {

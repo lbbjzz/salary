@@ -35,6 +35,7 @@ public class UploadDataListener extends AnalysisEventListener<UploadData> {
 
     @Override
     public void invoke(UploadData uploadData, AnalysisContext analysisContext) {
+        log.error(String.valueOf(uploadData));
         list.add(uploadData);
         // 达到BATCH_COUNT了，需要去存储一次数据库，防止数据几万条数据在内存，容易OOM
         if (list.size() >= BATCH_COUNT) {

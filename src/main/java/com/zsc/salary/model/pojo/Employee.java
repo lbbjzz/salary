@@ -59,7 +59,7 @@ public class Employee implements Serializable {
     @ApiModelProperty(value = "身份证号")
     private String idCard;
 
-    @ApiModelProperty(value = "采暖补贴")
+    @ApiModelProperty(value = "采暖补贴", hidden = true)
     @TableField(fill = FieldFill.INSERT)
     private BigDecimal heatingSubsidy;
 

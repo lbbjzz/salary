@@ -4,7 +4,6 @@ package com.zsc.salary.controller;
 import com.alibaba.excel.EasyExcel;
 import com.zsc.salary.bean.GlobalResponse;
 import com.zsc.salary.listener.UploadDataListener;
-import com.zsc.salary.listener.UploadDataNotCheckListener;
 import com.zsc.salary.model.data.UploadData;
 import com.zsc.salary.model.dto.ImportDto;
 import com.zsc.salary.model.dto.ImportIdArrays;
@@ -48,20 +47,6 @@ public class ImportController {
         }
         try {
             EasyExcel.read(file.getInputStream(), UploadData.class, new UploadDataListener(importService)).sheet().doRead();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return GlobalResponse.success().message("添加成功！");
-    }
-
-    @ApiOperation(value = "excel导入数据,不会进一步确认用户是否存在", notes = "不推荐使用这个方法，除非确保导入的用户一定存在")
-    @PostMapping("/uploadDataNotCheck")
-    public GlobalResponse uploadDataNotCheck(MultipartFile file) {
-        if(file.isEmpty()) {
-            return GlobalResponse.failed();
-        }
-        try {
-            EasyExcel.read(file.getInputStream(), UploadData.class, new UploadDataNotCheckListener(importService)).sheet().doRead();
         } catch (IOException e) {
             e.printStackTrace();
         }

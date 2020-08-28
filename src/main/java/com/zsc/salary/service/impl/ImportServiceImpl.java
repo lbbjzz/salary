@@ -46,33 +46,13 @@ public class ImportServiceImpl extends ServiceImpl<ImportMapper, Import> impleme
 
         Long startTime = System.currentTimeMillis();
 
-        List<UploadData> newList;
-
-        newList = list.stream().filter(uploadData -> {
-           Employee employee = employeeMapper.selectOne(new QueryWrapper<Employee>()
-                   .select("id")
-                   .eq("id", uploadData.getEmployeeId()));
-           return employee != null;
-       }).collect(Collectors.toList());
-
-        newList.forEach(System.out::println);
-
-        importMapper.insertImport(newList);
-
+        list.forEach(System.out::println);
+        for (UploadData uploadData : list) {
+            importMapper.uploadImport(uploadData);
+        }
         Long endTime = System.currentTimeMillis();
         log.error("耗费时间:" + (endTime - startTime));
 
-    }
-
-    @Override
-    public void insertImportNotCheck(List<UploadData> list) {
-
-        Long startTime = System.currentTimeMillis();
-
-        importMapper.insertImport(list);
-
-        Long endTime = System.currentTimeMillis();
-        log.error("耗费时间:" + (endTime - startTime));
     }
 
     @Override

@@ -77,6 +77,9 @@
             <when test="deptId != null">
                 AND e.dept_id = #{deptId}
             </when>
+            <when test="employeeName != null">
+                AND e.name like CONCAT('%',#{employeeName},'%')
+            </when>
             <when test="sortName == 'id' and sortOrder == true">
                 ORDER BY e.id ASC
             </when>
@@ -112,4 +115,5 @@
             #{id}
         </foreach>
     </insert>
+
 </mapper>

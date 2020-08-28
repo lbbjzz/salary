@@ -57,4 +57,11 @@ public interface JobService extends IService<Job> {
      * @return 返回结果，-1为该职位还有员工，0为删除失败，1为删除成功
      */
     int deleteById(Integer id);
+
+    /**
+     * 判断岗位名是否重复
+     * @param name
+     * @return true 表示岗位已存在
+     */
+    Boolean jobNameExist(String name);
 }

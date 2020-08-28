@@ -93,5 +93,12 @@ public class JobController {
         return GlobalResponse.success().message("删除成功");
     }
 
+    @ApiOperation(value = "判断岗位名是否已经存在", notes = "true表示已经存在")
+    @PostMapping("/jobNameExist")
+    public GlobalResponse jobNameExist(String name) {
+        Boolean flag = jobService.jobNameExist(name);
+        return GlobalResponse.success().data("isExist", flag);
+    }
+
 }
 

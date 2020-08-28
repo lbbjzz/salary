@@ -73,4 +73,10 @@ public interface EmployeeService extends IService<Employee> {
      * @param heatingSubsidy 采暖补贴
      */
     void addHeatingSubsidy(Integer[] employeeId, BigDecimal heatingSubsidy);
+
+    /**
+     * 获取全部在职人员的Id
+     * @return 在职人员的Id
+     */
+    List<Employee> getEmployeeId();
 }

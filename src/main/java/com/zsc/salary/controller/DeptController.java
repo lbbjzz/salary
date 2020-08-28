@@ -39,7 +39,7 @@ public class DeptController {
     }
 
     @ApiOperation(value = "删除部门信息", notes = "逻辑删除")
-    @DeleteMapping("/deleteDept")
+    @PostMapping("/deleteDept")
     public GlobalResponse deleteDept(@RequestParam Integer id) {
         int flag = deptService.deleteById(id);
         if (flag == -1){
@@ -91,5 +91,13 @@ public class DeptController {
         List<Dept> depts = deptService.allDept();
         return GlobalResponse.success().data("allDept", depts);
     }
+
+    @ApiOperation(value = "判断部门名是否重复")
+    @GetMapping("/deptNameExisting")
+    public GlobalResponse deptNameExisting(String name) {
+        Boolean flag = deptService.deptNameExisting(name);
+        return GlobalResponse.success().data("isExist", flag);
+    }
+
 }
 
