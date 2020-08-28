@@ -2,6 +2,7 @@ package com.zsc.salary.service;
 
 import com.zsc.salary.model.pojo.Salary;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zsc.salary.model.vo.EmployeeSalaryVO;
 import com.zsc.salary.model.vo.SalaryDeptStatVO;
 
 import java.math.BigDecimal;
@@ -80,4 +81,6 @@ public interface SalaryService extends IService<Salary> {
      * @return true表示已经发放工资 false表示未发放工资
      */
     Boolean judgeSendSalary(Integer deptId, String time);
+
+    List<EmployeeSalaryVO> getEmployeeSalaryStat();
 }

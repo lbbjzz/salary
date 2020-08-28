@@ -2,6 +2,7 @@ package com.zsc.salary.mapper;
 
 import com.zsc.salary.model.pojo.Salary;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.zsc.salary.model.vo.EmployeeSalaryVO;
 import com.zsc.salary.model.vo.SalaryDeptStatVO;
 import com.zsc.salary.model.vo.SalaryVo;
 import org.apache.ibatis.annotations.Select;
@@ -58,4 +59,5 @@ public interface SalaryMapper extends BaseMapper<Salary> {
 
     Map<String, Object> getCompYearlySalaryStat(Map<String, Object> queryMap);
 
+    EmployeeSalaryVO getEmployeeSalaryStat(Integer employeeId);
 }

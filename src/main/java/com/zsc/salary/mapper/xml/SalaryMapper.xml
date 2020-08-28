@@ -177,4 +177,39 @@
         <result property="minSalary" column="minSalary"/>
         <result property="avgSalary" column="avgSalary"/>
     </resultMap>
+
+    <select id="getEmployeeSalaryStat" resultMap="EmployeeSalary" parameterType="int">
+        SELECT
+	        e.id employeeId,
+	        e.name employeeName,
+	        SUM(s.basic_salary) basicSalaryTotal,
+	        SUM(s.company_endowment_insurance + s.personal_endowment_insurance) endowmentInsuranceTotal,
+	        SUM(s.company_accumulation_fund + s.personal_accumulation_fund) accumulationFundTotal,
+	        SUM(s.company_medical_insurance + s.personal_medical_insurance) medicalInsuranceTotal,
+	        SUM(s.sick_leave_deduction) sickLeaveDeductionTotal,
+	        SUM(s.personal_leave_deduction) personalLeaveDeductionTotal,
+	        SUM(s.late_deduction) lateDeductionTotal,
+	        SUM(s.overtime_pay) overtimePayTotal
+        FROM
+	        employee e,
+	        salary s
+        WHERE
+	        s.employee_id = e.id
+	        AND
+	        s.employee_id = #{employeeId}
+    </select>
+
+    <resultMap id="EmployeeSalary" type="com.zsc.salary.model.vo.EmployeeSalaryVO">
+        <result property="employeeId" column="employeeId"/>
+        <result property="employeeName" column="employeeName"/>
+        <result property="baseSalaryTotal" column="baseSalaryTotal"/>
+        <result property="endowmentInsuranceTotal" column="endowmentInsuranceTotal"/>
+        <result property="accumulationFundTotal" column="accumulationFundTotal"/>
+        <result property="medicalInsuranceTotal" column="medicalInsuranceTotal"/>
+        <result property="sickLeaveDeductionTotal" column="sickLeaveDeductionTotal"/>
+        <result property="personalLeaveDeductionTotal" column="personalLeaveDeductionTotal"/>
+        <result property="lateDeductionTotal" column="lateDeductionTotal"/>
+        <result property="overtimePayTotal" column="overtimePayTotal"/>
+    </resultMap>
+
 </mapper>

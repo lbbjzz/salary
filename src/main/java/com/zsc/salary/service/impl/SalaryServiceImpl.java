@@ -1,16 +1,15 @@
 package com.zsc.salary.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sun.xml.bind.v2.TODO;
 import com.zsc.salary.mapper.CalculateMapper;
 import com.zsc.salary.mapper.EmployeeMapper;
 import com.zsc.salary.mapper.ImportMapper;
-import com.zsc.salary.model.pojo.Calculate;
-import com.zsc.salary.model.pojo.Dept;
-import com.zsc.salary.model.pojo.Import;
-import com.zsc.salary.model.pojo.Salary;
+import com.zsc.salary.model.pojo.*;
 import com.zsc.salary.mapper.SalaryMapper;
+import com.zsc.salary.model.vo.EmployeeSalaryVO;
 import com.zsc.salary.model.vo.EmployeeVO;
 import com.zsc.salary.model.vo.SalaryDeptStatVO;
 import com.zsc.salary.model.vo.SalaryVo;
@@ -239,6 +238,17 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
     public Boolean judgeSendSalary(Integer deptId, String time) {
         Integer count = salaryMapper.isSendSalary(deptId, time);
         return count != 0;
+    }
+
+    @Override
+    public List<EmployeeSalaryVO> getEmployeeSalaryStat() {
+        List<EmployeeSalaryVO> employeeSalaryVOList = new ArrayList<>();
+        List<Employee> employeeList = employeeMapper.selectList(new QueryWrapper<Employee>().select("id"));
+        employeeList.forEach(employee -> {
+            EmployeeSalaryVO employeeSalaryStat = salaryMapper.getEmployeeSalaryStat(employee.getId());
+            employeeSalaryVOList.add(employeeSalaryStat);
+        });
+        return employeeSalaryVOList;
     }
 
     @Override

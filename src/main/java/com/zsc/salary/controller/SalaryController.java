@@ -2,6 +2,7 @@ package com.zsc.salary.controller;
 
 
 import com.zsc.salary.bean.GlobalResponse;
+import com.zsc.salary.model.vo.EmployeeSalaryVO;
 import com.zsc.salary.model.vo.SalaryDeptStatVO;
 import com.zsc.salary.service.SalaryService;
 import io.swagger.annotations.ApiOperation;
@@ -167,6 +168,12 @@ public class SalaryController {
         log.error(time);
         Boolean isSend = salaryService.judgeSendSalary(deptId, time);
         return GlobalResponse.success().data("isSend", isSend);
+    }
+
+    @GetMapping("/getEmployeeSalaryStat")
+    public GlobalResponse getEmployeeSalaryStat() {
+        List<EmployeeSalaryVO> employeeSalaryStat = salaryService.getEmployeeSalaryStat();
+        return GlobalResponse.success().data("employeeSalaryStat", employeeSalaryStat);
     }
 }
 
