@@ -49,7 +49,7 @@
         <result property="modifyTime" column="modify_time"/>
     </resultMap>
 
-    <select id="getMonthlySalaryStatByDeptId" parameterType="Map" resultMap="salaryStat">
+    <select id="getDeptMonthlySalaryStatById" parameterType="Map" resultMap="salaryStat">
         select
             d.id deptId,
             d.name deptName,
@@ -72,7 +72,7 @@
             e.dept_id = d.id
     </select>
 
-    <select id="getYearlySalaryStatByDeptId" parameterType="Map" resultMap="salaryStat">
+    <select id="getDeptYearlySalaryStatById" parameterType="Map" resultMap="salaryStat">
         select
             d.id deptId,
             d.name deptName,

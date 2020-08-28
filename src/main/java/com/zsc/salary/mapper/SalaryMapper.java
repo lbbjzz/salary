@@ -31,8 +31,8 @@ public interface SalaryMapper extends BaseMapper<Salary> {
      * @param queryMap 查询条件
      * @return 月度统计信息Map
      */
-    SalaryDeptStatVO getMonthlySalaryStatByDeptId(Map<String, Object> queryMap);
+    SalaryDeptStatVO getDeptMonthlySalaryStatById(Map<String, Object> queryMap);
 
-    SalaryDeptStatVO getYearlySalaryStatByDeptId(Map<String, Object> queryMap);
+    SalaryDeptStatVO getDeptYearlySalaryStatById(Map<String, Object> queryMap);
 
 }

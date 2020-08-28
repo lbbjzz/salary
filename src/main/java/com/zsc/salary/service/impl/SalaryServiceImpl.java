@@ -170,7 +170,7 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
     }
 
     @Override
-    public SalaryDeptStatVO getMonthlySalaryStatByDeptId(String month, Integer deptId) {
+    public SalaryDeptStatVO getDeptMonthlySalaryStatById(String month, Integer deptId) {
         if (month == null || deptId == null) {
             throw new RuntimeException("查询数据为空，查询失败");
         }
@@ -178,23 +178,23 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
         queryMap.put("queryDate", month);
         queryMap.put("deptId", deptId);
 
-        return salaryMapper.getMonthlySalaryStatByDeptId(queryMap);
+        return salaryMapper.getDeptMonthlySalaryStatById(queryMap);
 
     }
 
     @Override
-    public List<SalaryDeptStatVO> getMonthlySalaryStat(String month){
+    public List<SalaryDeptStatVO> getDeptMonthlySalaryStat(String month){
         List<Dept> deptList = deptService.allDept();
         List<SalaryDeptStatVO> salaryDeptStatVOList = new ArrayList<>();
         deptList.forEach(dept -> {
-            SalaryDeptStatVO salaryDeptStatVO = this.getMonthlySalaryStatByDeptId(month, dept.getId());
+            SalaryDeptStatVO salaryDeptStatVO = this.getDeptMonthlySalaryStatById(month, dept.getId());
             salaryDeptStatVOList.add(salaryDeptStatVO);
         });
         return salaryDeptStatVOList;
     }
 
     @Override
-    public SalaryDeptStatVO getYearlySalaryStatByDeptId(String year, Integer deptId) {
+    public SalaryDeptStatVO getDeptYearlySalaryStatById(String year, Integer deptId) {
         if (year == null || deptId == null) {
             throw new RuntimeException("查询数据为空，查询失败");
         }
@@ -202,15 +202,15 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
         queryMap.put("queryDate", year);
         queryMap.put("deptId", deptId);
 
-        return salaryMapper.getYearlySalaryStatByDeptId(queryMap);
+        return salaryMapper.getDeptYearlySalaryStatById(queryMap);
     }
 
     @Override
-    public List<SalaryDeptStatVO> getYearlySalaryStat(String year) {
+    public List<SalaryDeptStatVO> getDeptYearlySalaryStat(String year) {
         List<Dept> deptList = deptService.allDept();
         List<SalaryDeptStatVO> salaryDeptStatVOList = new ArrayList<>();
         deptList.forEach(dept -> {
-            SalaryDeptStatVO salaryDeptStatVO = this.getYearlySalaryStatByDeptId(year, dept.getId());
+            SalaryDeptStatVO salaryDeptStatVO = this.getDeptYearlySalaryStatById(year, dept.getId());
             salaryDeptStatVOList.add(salaryDeptStatVO);
         });
         return salaryDeptStatVOList;

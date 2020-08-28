@@ -52,7 +52,7 @@ public class SalaryController {
     @GetMapping("/getMonthlySalaryStatByDeptId")
     public GlobalResponse getMonthlySalaryStatByDeptId(@RequestParam String month,
                                                        @RequestParam Integer deptId){
-        SalaryDeptStatVO salary = salaryService.getMonthlySalaryStatByDeptId(month, deptId);
+        SalaryDeptStatVO salary = salaryService.getDeptMonthlySalaryStatById(month, deptId);
         if (salary == null) {
             return GlobalResponse.failed().message("查询失败");
         }
@@ -62,7 +62,7 @@ public class SalaryController {
     @ApiOperation(value = "查询所有部门的月度最高、最低、平均工资", notes = "按月份查询")
     @GetMapping("/getMonthlySalaryStat")
     public GlobalResponse getMonthlySalaryStat(@RequestParam String month){
-        List<SalaryDeptStatVO> salary = salaryService.getMonthlySalaryStat(month);
+        List<SalaryDeptStatVO> salary = salaryService.getDeptMonthlySalaryStat(month);
 
         if (salary == null) {
             return GlobalResponse.failed().message("查询失败");
@@ -74,7 +74,7 @@ public class SalaryController {
     @GetMapping("/getYearlySalaryStatByDeptId")
     public GlobalResponse getYearlySalaryStatByDeptId(@RequestParam String year,
                                                       @RequestParam Integer deptId){
-        SalaryDeptStatVO salary = salaryService.getYearlySalaryStatByDeptId(year, deptId);
+        SalaryDeptStatVO salary = salaryService.getDeptYearlySalaryStatById(year, deptId);
         if (salary == null) {
             return GlobalResponse.failed().message("查询失败");
         }
@@ -84,7 +84,7 @@ public class SalaryController {
     @ApiOperation(value = "查询所有部门的年度最高、最低、平均工资", notes = "按年份查询")
     @GetMapping("/getYearlySalaryStat")
     public GlobalResponse getYearlySalaryStat(@RequestParam String year){
-        List<SalaryDeptStatVO> salary = salaryService.getYearlySalaryStat(year);
+        List<SalaryDeptStatVO> salary = salaryService.getDeptYearlySalaryStat(year);
 
         if (salary == null) {
             return GlobalResponse.failed().message("查询失败");

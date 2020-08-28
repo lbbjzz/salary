@@ -43,17 +43,28 @@ public interface SalaryService extends IService<Salary> {
      * @param month 查询月份
      * @return 月度统计信息List<SalaryDeptStatVO>
      */
-    List<SalaryDeptStatVO> getMonthlySalaryStat(String month);
+    List<SalaryDeptStatVO> getDeptMonthlySalaryStat(String month);
 
     /**
      * 根据id获取部门月度工资统计信息
      * @param month 查询月份
-     * @param deptId 部门id
+     * @param deptId 查询的部门id
      * @return 月度统计信息SalaryDeptStatVO
      */
-    SalaryDeptStatVO getMonthlySalaryStatByDeptId(String month, Integer deptId);
+    SalaryDeptStatVO getDeptMonthlySalaryStatById(String month, Integer deptId);
 
-    SalaryDeptStatVO getYearlySalaryStatByDeptId(String year, Integer deptId);
+    /**
+     * 根据id查询部门的年度度工资统计信息
+     * @param year 查询年份
+     * @param deptId 查询的部门id
+     * @return 年度统计信息SalaryDeptStatVO
+     */
+    SalaryDeptStatVO getDeptYearlySalaryStatById(String year, Integer deptId);
 
-    List<SalaryDeptStatVO> getYearlySalaryStat(String year);
+    /**
+     * 查询所有部门的年度工资统计信息
+     * @param year 查询年份
+     * @return 年度统计信息List<SalaryDeptStatVO>
+     */
+    List<SalaryDeptStatVO> getDeptYearlySalaryStat(String year);
 }
