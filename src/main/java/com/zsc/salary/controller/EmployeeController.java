@@ -139,5 +139,27 @@ public class EmployeeController {
         return GlobalResponse.success().message("查询成功");
     }
 
+    @ApiOperation(value = "查询员工固定工资(员工固定工资管理页)", notes = "total为数据总数用于分页，employeeFixedSalaryVos 为查询的数据")
+    @GetMapping("/listFixedSalaryVo/{pageNo}/{pageSize}/{deptId}/{employeeName}")
+    public GlobalResponse listFixedSalaryVo(@PathVariable(value = "pageNo") Integer pageNo,
+                                          @PathVariable(value = "pageSize") Integer pageSize,
+                                          @PathVariable(value = "deptId") Integer deptId,
+                                          @PathVariable(value = "employeeName") String employeeName){
+
+        System.out.println("employeeName = " + employeeName);
+        System.out.println("deptId = " + deptId);
+        Map<String, Object> map = new HashMap<>();
+        if (deptId != 0) {
+            map.put("deptId", deptId);
+        }
+        if (!"null".equals(employeeName)) {
+            map.put("employeeName", employeeName);
+        }
+        map.put("pageNo", pageNo);
+        map.put("pageSize", pageSize);
+        Map<String, Object> resultMap = employeeService.listEmployeeFixedSalaryVo(map);
+        return GlobalResponse.success().data(resultMap).message("查询成功");
+    }
+
 }
 

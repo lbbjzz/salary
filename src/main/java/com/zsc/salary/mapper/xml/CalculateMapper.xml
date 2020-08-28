@@ -16,7 +16,44 @@
         WHERE
             c.employee_id = e.id
           AND e.status = 1
-          AND e.dept_id = d.id
           AND e.job_id = j.id
+        <choose>
+            <when test="deptId != null">
+                AND e.dept_id = #{deptId}
+            </when>
+            <when test="employeeName != null">
+                AND e.name like CONCAT('%',#{employeeName},'%')
+            </when>
+        </choose>
+        AND e.dept_id = d.id
     </select>
+
+    <update id="updateCalculate" parameterType="com.zsc.salary.model.dto.CalculateDto">
+        UPDATE calculate
+            SET daily_sick_leave_deduction = #{dailySickLeaveDeduction},
+            daily_personal_leave_deduction = #{dailyPersonalLeaveDeduction},
+            daily_late_deduction = #{dailyLateDeduction},
+            daily_overtime_pay = #{dailyOvertimePay},
+            personal_endowment_insurance_rate = #{personalEndowmentInsuranceRate},
+            company_endowment_insurance_rate = #{companyEndowmentInsuranceRate},
+            personal_unemployment_insurance_rate = #{personalUnemploymentInsuranceRate},
+            personal_accumulation_fund_rate = #{personalAccumulationFundRate},
+            company_accumulation_fund_rate = #{companyAccumulationFundRate},
+            personal_medical_insurance_rate = #{personalMedicalInsuranceRate},
+            company_medical_insurance_rate = #{companyMedicalInsuranceRate},
+            personal_income_tax_rate = #{personalIncomeTaxRate},
+            modify_time = NOW()
+        WHERE
+        <choose>
+            <when test="id != null">
+               id = #{id}
+            </when>
+            <when test="id == null">
+                id in
+                <foreach collection="ids" item="id" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </when>
+        </choose>
+    </update>
 </mapper>

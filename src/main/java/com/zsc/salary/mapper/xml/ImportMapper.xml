@@ -2,22 +2,37 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zsc.salary.mapper.ImportMapper">
 
-    <insert id="insertImport" parameterType="java.util.List">
+    <insert id="insertImport" parameterType="com.zsc.salary.model.data.UploadData">
         INSERT INTO import(employee_id, sick_leave_day, personal_leave_day, late_day, overtime_day, back_pay, create_time, modify_time)
         VALUES
-        <foreach collection="list" item="item" separator=",">
         (
-            #{item.employeeId},
-            #{item.sickLeaveDay},
-            #{item.personalLeaveDay},
-            #{item.lateDay},
-            #{item.overtimeDay},
-            #{item.backPay},
-            NOW(),
-            NOW()
+        #{employeeId},
+        #{sickLeaveDay},
+        #{personalLeaveDay},
+        #{lateDay},
+        #{overtimeDay},
+        #{backPay},
+        NOW(),
+        NOW()
         )
-        </foreach>
     </insert>
+
+    <update id="uploadImport" parameterType="com.zsc.salary.model.data.UploadData">
+            UPDATE import
+                set
+                    sick_leave_day = #{sickLeaveDay},
+                    personal_leave_day = #{personalLeaveDay},
+                    late_day = #{lateDay},
+                    overtime_day = #{overtimeDay},
+                    back_pay = #{backPay},
+                    modify_time = NOW()
+                where
+                    DATE_FORMAT( create_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ), '%Y%m' )
+                    AND deleted = 0
+                    AND employee_id = #{employeeId}
+    </update>
+
+
     <delete id="deleteImportRepeat" parameterType="Map">
         update import set deleted = 1 where id in
         <foreach collection="importId" item="id" open="(" separator="," close=")">

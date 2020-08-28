@@ -2,6 +2,7 @@ package com.zsc.salary.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.zsc.salary.model.dto.CalculateDto;
 import com.zsc.salary.model.pojo.Calculate;
 import com.zsc.salary.mapper.CalculateMapper;
 import com.zsc.salary.model.vo.CalculateVo;
@@ -59,11 +60,19 @@ public class CalculateServiceImpl extends ServiceImpl<CalculateMapper, Calculate
         Integer pageNo = (Integer) map.get("pageNo");
         Integer pageSize = (Integer) map.get("pageSize");
         PageHelper.startPage(pageNo, pageSize);
-        List<CalculateVo> calculateVoList = calculateMapper.listCalculateVo(null);
+        log.error(String.valueOf(map));
+        List<CalculateVo> calculateVoList = calculateMapper.listCalculateVo(map);
+        log.error(String.valueOf(calculateVoList));
         Map<String, Object> result = new HashMap<>();
         PageInfo<CalculateVo> info = new PageInfo<>(calculateVoList);
         result.put("calculateVoList", calculateVoList);
         result.put("total", info.getTotal());
         return result;
+    }
+
+    @Override
+    public void updateCalculate(CalculateDto calculateDto) {
+        log.error(String.valueOf(calculateDto));
+        calculateMapper.updateCalculate(calculateDto);
     }
 }

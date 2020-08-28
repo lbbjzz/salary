@@ -25,11 +25,6 @@ public interface ImportService extends IService<Import> {
      */
     void insertImport(List<UploadData> list);
 
-    /**
-     * excel导入数据 这个方法不进行检测 需要保证导入的时候用户一定存在
-     * @param list 存入的数据
-     */
-    void insertImportNotCheck(List<UploadData> list);
 
     /**
      * 修改导入的数据

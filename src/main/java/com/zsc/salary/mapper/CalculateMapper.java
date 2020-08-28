@@ -1,5 +1,6 @@
 package com.zsc.salary.mapper;
 
+import com.zsc.salary.model.dto.CalculateDto;
 import com.zsc.salary.model.pojo.Calculate;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.zsc.salary.model.vo.CalculateVo;
@@ -23,4 +24,11 @@ public interface CalculateMapper extends BaseMapper<Calculate> {
      * @return 计算工资项目
      */
     List<CalculateVo> listCalculateVo(Map<String, Object> map);
+
+    /**
+     * 更新员工的计算工资项目
+     * @param calculateDto 包含更新的数据
+     */
+    void updateCalculate(CalculateDto calculateDto);
+
 }
