@@ -117,4 +117,39 @@
               AND deleted = 0
               group by employee_id having count(employee_id) > 1)
     </select>
+    <select id="listImport" resultType="com.zsc.salary.model.vo.ImportVo">
+        SELECT
+        i.id,
+        e.name employee_name,
+        d.name employee_dept,
+        j.name employee_job,
+        i.sick_leave_day,
+        i.personal_leave_day,
+        i.late_day,
+        i.overtime_day,
+        i.back_pay,
+        i.create_time,
+        i.deleted
+        FROM
+        import i,
+        employee e,
+        job j,
+        dept d
+        WHERE
+        i.employee_id = e.id
+        AND
+        e.job_id = j.id
+        AND
+        i.deleted = 0
+        AND DATE_FORMAT( i.create_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+        <choose>
+            <when test="deptId != null">
+                AND e.dept_id = #{deptId}
+            </when>
+            <when test="employeeName != null">
+                AND e.name like CONCAT('%',#{employeeName},'%')
+            </when>
+        </choose>
+        AND e.dept_id = d.id
+    </select>
 </mapper>

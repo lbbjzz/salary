@@ -32,11 +32,10 @@ public interface SalaryService extends IService<Salary> {
     /**
      * 分页获取员工工资详细信息
      *
-     * @param pageNo   页号
-     * @param pageSize 每页的数量
+     * @param map 查询条件 pageNo 页数 pageSize 每页显示的数量 deptId 查询的部门ID time 查询的月数
      * @return 员工工资信息
      */
-    Map<String, Object> listSalaryVo(Integer pageNo, Integer pageSize);
+    Map<String, Object> listSalaryVo(Map<String, Object> map);
 
     /**
      * 查询所有部门的月度工资统计信息
@@ -67,4 +66,12 @@ public interface SalaryService extends IService<Salary> {
      * @return 年度统计信息List<SalaryDeptStatVO>
      */
     List<SalaryDeptStatVO> getDeptYearlySalaryStat(String year);
+
+    /**
+     * 查询该部门在今年该月是否发放了工资
+     * @param deptId 部门Id
+     * @param time 月份
+     * @return true表示已经发放工资 false表示未发放工资
+     */
+    Boolean judgeSendSalary(Integer deptId, String time);
 }

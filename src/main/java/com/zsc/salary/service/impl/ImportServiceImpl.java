@@ -9,6 +9,7 @@ import com.zsc.salary.model.pojo.Employee;
 import com.zsc.salary.model.pojo.Import;
 import com.zsc.salary.mapper.ImportMapper;
 import com.zsc.salary.model.dto.ImportDto;
+import com.zsc.salary.model.vo.CalculateVo;
 import com.zsc.salary.model.vo.ImportVo;
 import com.zsc.salary.service.ImportService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -17,6 +18,7 @@ import org.dozer.Mapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -67,6 +69,19 @@ public class ImportServiceImpl extends ServiceImpl<ImportMapper, Import> impleme
     }
 
     @Override
+    public int clearImportData(Integer importId) {
+        Import imports = new Import();
+        imports.setId(importId)
+                .setBackPay(BigDecimal.valueOf(0))
+                .setLateDay(0)
+                .setPersonalLeaveDay(0)
+                .setSickLeaveDay(0)
+                .setOvertimeDay(0);
+
+        return importMapper.updateById(imports);
+    }
+
+    @Override
     public int deleteImport(Integer importId) {
         return importMapper.deleteById(importId);
     }
@@ -87,6 +102,21 @@ public class ImportServiceImpl extends ServiceImpl<ImportMapper, Import> impleme
         map.put("listImportVo", list);
         map.put("total", total);
         return map;
+    }
+
+    @Override
+    public Map<String, Object> listImportVo(Map<String, Object> map) {
+        Integer pageNo = (Integer) map.get("pageNo");
+        Integer pageSize = (Integer) map.get("pageSize");
+        PageHelper.startPage(pageNo, pageSize);
+        log.error(String.valueOf(map));
+        List<ImportVo> listImportVo = importMapper.listImport(map);
+        log.error(String.valueOf(listImportVo));
+        Map<String, Object> result = new HashMap<>(2);
+        PageInfo<ImportVo> info = new PageInfo<>(listImportVo);
+        result.put("listImportVo", listImportVo);
+        result.put("total", info.getTotal());
+        return result;
     }
 
     @Override

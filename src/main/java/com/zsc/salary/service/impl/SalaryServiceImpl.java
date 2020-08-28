@@ -17,6 +17,7 @@ import com.zsc.salary.model.vo.SalaryVo;
 import com.zsc.salary.service.DeptService;
 import com.zsc.salary.service.SalaryService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zsc.salary.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -57,6 +58,9 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
 
     @Resource
     CalculateMapper calculateMapper;
+
+    @Resource
+    RedisUtil redisUtil;
 
     @Override
     public int addSalary(Integer importId) {
@@ -159,14 +163,16 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
     }
 
     @Override
-    public Map<String, Object> listSalaryVo(Integer pageNo, Integer pageSize) {
-        Map<String, Object> map = new HashMap<>(2);
+    public Map<String, Object> listSalaryVo(Map<String, Object> map) {
+        Integer pageNo = (Integer) map.get("pageNo");
+        Integer pageSize = (Integer) map.get("pageSize");
+        Map<String, Object> result = new HashMap<>(2);
         PageHelper.startPage(pageNo, pageSize);
-        List<SalaryVo> salaryVoList = salaryMapper.listSalaryVo();
+        List<SalaryVo> salaryVoList = salaryMapper.listSalaryVo(map);
         PageInfo<SalaryVo> pageInfo = new PageInfo<>(salaryVoList);
-        map.put("salaryVoList", salaryVoList);
-        map.put("total", pageInfo.getTotal());
-        return map;
+        result.put("salaryVoList", salaryVoList);
+        result.put("total", pageInfo.getTotal());
+        return result;
     }
 
     @Override
@@ -214,5 +220,11 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
             salaryDeptStatVOList.add(salaryDeptStatVO);
         });
         return salaryDeptStatVOList;
+    }
+
+    @Override
+    public Boolean judgeSendSalary(Integer deptId, String time) {
+        Integer count = salaryMapper.isSendSalary(deptId, time);
+        return count != 0;
     }
 }

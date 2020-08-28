@@ -43,6 +43,9 @@ public class Salary implements Serializable {
     @ApiModelProperty(value = "员工ID")
     private Integer employeeId;
 
+    @ApiModelProperty(value = "员工考勤表ID")
+    private Integer importId;
+
     @ApiModelProperty(value = "基本工资")
     private BigDecimal basicSalary;
 

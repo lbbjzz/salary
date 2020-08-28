@@ -10,6 +10,7 @@ import com.zsc.salary.model.dto.ImportIdArrays;
 import com.zsc.salary.model.vo.ImportVo;
 import com.zsc.salary.service.ImportService;
 import io.swagger.annotations.*;
+import org.omg.CORBA.INTERNAL;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -92,6 +94,27 @@ public class ImportController {
         return GlobalResponse.success().data(map).message("获取成功！");
     }
 
+    @ApiOperation(value = "查询导入的考勤数据", notes = "包含listImportVo数据， total全部的总数量")
+    @GetMapping("/listImport/{pageNo}/{pageSize}/{deptId}/{employeeName}")
+    public GlobalResponse listImport(@PathVariable(value = "pageNo") Integer pageNo,
+                                       @PathVariable(value = "pageSize") Integer pageSize,
+                                       @PathVariable(value = "deptId") Integer deptId,
+                                     @PathVariable(value = "employeeName") String employeeName) {
+        System.out.println("employeeName = " + employeeName);
+        System.out.println("deptId = " + deptId);
+        Map<String, Object> map = new HashMap<>();
+        if (deptId != 0) {
+            map.put("deptId", deptId);
+        }
+        if (!"null".equals(employeeName)) {
+            map.put("employeeName", employeeName);
+        }
+        map.put("pageNo", pageNo);
+        map.put("pageSize", pageSize);
+        Map<String, Object> resultMap = importService.listImportVo(map);
+        return GlobalResponse.success().data(resultMap).message("更新成功");
+    }
+
 
     @ApiOperation(value = "查询导入中重复的数据", notes = "包含listImportVo数据， total全部的总数量")
     @GetMapping("/listImportVoRepeatData")
@@ -109,6 +132,17 @@ public class ImportController {
         importService.deleteRepeatImportData(importIdArrays.getId());
         System.out.println(Arrays.toString(importIdArrays.getId()));
         return GlobalResponse.success().message("获取成功！");
+    }
+
+    @ApiOperation(value = "清除该员工的考勤数据")
+    @GetMapping("/clearImportData/{importId}")
+    public GlobalResponse clearImportData(@PathVariable("importId") Integer importId) {
+        int flag = importService.clearImportData(importId);
+        if (flag == 0) {
+            return GlobalResponse.failed().message("清除失败！");
+        }
+        return GlobalResponse.success().message("清除成功！");
+
     }
 
 }

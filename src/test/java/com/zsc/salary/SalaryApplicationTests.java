@@ -20,38 +20,4 @@ import java.util.List;
 
 @SpringBootTest
 class SalaryApplicationTests {
-
-    @Resource
-    private EmployeeMapper employeeMapper;
-
-    @Resource
-    private EmployeeService employeeService;
-
-    @Resource
-    private SalaryService salaryService;
-
-    @Resource
-    private CalculateService calculateService;
-
-    @Resource
-    private ImportService importService;
-
-    @Test
-    void contextLoads() {
-        System.out.println(employeeMapper.selectOne(new QueryWrapper<Employee>().select("id").eq("id", 2)));
-    }
-
-    @Test
-    void insert(){
-        Employee employee = new Employee();
-        employee.setDeptId(1);
-        employee.setJobId(1);
-        employee.setName("sss");
-        employeeService.insert(employee);
-    }
-
-    @Test
-    void update(){
-    }
-
 }
