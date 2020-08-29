@@ -65,6 +65,14 @@ public class SalaryController {
         return GlobalResponse.success().data(result);
     }
 
+    @ApiOperation(value = "获取全部的工资数据", notes = "deptId为查询的部门Id 0为显示全部 time为查询的月份 0 为不查询")
+    @GetMapping("/allSalaryVO")
+    public GlobalResponse allSalaryVO(@RequestParam Integer deptId,
+                                       @RequestParam String time) {
+        Map<String, Object> result = salaryService.listSalaryVo(deptId, time);
+        return GlobalResponse.success().data(result);
+    }
+
     @ApiOperation(value = "工资查询报表", notes = "pageNo，pageSize为分页，beginTime为开始日期(-1为不查询)，endTime为结束日期(-1为不查询)，deptName为部门名(-1为不查询)")
     @GetMapping("/listSalaryVoDetail")
     public GlobalResponse listSalaryVoDetail(@RequestParam Integer pageNo,

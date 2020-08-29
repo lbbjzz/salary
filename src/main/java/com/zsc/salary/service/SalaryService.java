@@ -39,6 +39,15 @@ public interface SalaryService extends IService<Salary> {
     Map<String, Object> listSalaryVo(Map<String, Object> map);
 
     /**
+     * 全部获取获取员工工资详细信息
+     *
+     * @param deptId 查询的部门ID
+     * @param time 查询的月数
+     * @return 员工工资信息
+     */
+    Map<String, Object> listSalaryVo(Integer deptId, String time);
+
+    /**
      * 获取工资查询报表
      * @param map 查询条件，beginDate开始时间，endDate结束时间，deptName部门名
      * @return 工资报表数据

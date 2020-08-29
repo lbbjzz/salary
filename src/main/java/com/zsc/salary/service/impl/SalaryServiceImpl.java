@@ -112,6 +112,22 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
     }
 
     @Override
+    public Map<String, Object> listSalaryVo(Integer deptId, String time) {
+        Map<String, Object> map = new HashMap<>(2);
+        if (deptId != 0) {
+            map.put("deptId", deptId);
+        }
+        if (!"0".equals(time)) {
+            map.put("time", time);
+        }
+        Map<String, Object> result = new HashMap<>(2);
+        List<SalaryVo> salaryVoList = salaryMapper.listSalaryVo(map);
+        result.put("salaryVoList", salaryVoList);
+        result.put("total", salaryVoList.size());
+        return result;
+    }
+
+    @Override
     public Map<String, Object> listSalaryVoDetail(Map<String, Object> map) {
         //分页当前页
         Integer pageNo = (Integer) map.get("pageNo");
