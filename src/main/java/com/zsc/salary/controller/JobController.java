@@ -4,6 +4,7 @@ package com.zsc.salary.controller;
 import com.zsc.salary.bean.GlobalResponse;
 import com.zsc.salary.model.dto.JobDto;
 import com.zsc.salary.model.pojo.Job;
+import com.zsc.salary.model.vo.JobCountVO;
 import com.zsc.salary.service.JobService;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
@@ -13,6 +14,7 @@ import io.swagger.models.auth.In;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -100,5 +102,14 @@ public class JobController {
         return GlobalResponse.success().data("isExist", flag);
     }
 
+    @ApiOperation(value = "获取全部岗位的在岗人数")
+    @GetMapping("/getJobCount")
+    public GlobalResponse getJobCount() {
+        List<JobCountVO> jobCount = jobService.getJobCount();
+        if (jobCount.isEmpty()) {
+            return GlobalResponse.failed().message("查询失败");
+        }
+        return GlobalResponse.success().data("jobCount", jobCount);
+    }
 }
 

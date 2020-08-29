@@ -8,6 +8,7 @@ import com.zsc.salary.model.dto.JobDto;
 import com.zsc.salary.model.pojo.Job;
 import com.zsc.salary.mapper.JobMapper;
 import com.zsc.salary.model.vo.EmployeeVO;
+import com.zsc.salary.model.vo.JobCountVO;
 import com.zsc.salary.service.EmployeeService;
 import com.zsc.salary.service.JobService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,6 +16,7 @@ import org.dozer.Mapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +33,7 @@ import java.util.Map;
 public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobService {
 
     @Resource
-    JobMapper jobMapper;
+    private JobMapper jobMapper;
 
     @Resource
     private EmployeeService employeeService;
@@ -88,5 +90,16 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
     public Boolean jobNameExist(String name) {
         Job job = jobMapper.selectOne(new QueryWrapper<Job>().eq("name", name));
         return job != null;
+    }
+
+    @Override
+    public List<JobCountVO> getJobCount() {
+        List<Job> jobList = jobMapper.selectList(new QueryWrapper<Job>().select("id").eq("deleted", 0));
+        List<JobCountVO> jobCountList = new ArrayList<>();
+        jobList.forEach(job -> {
+            JobCountVO jobCountById = jobMapper.getJobCountById(job.getId());
+            jobCountList.add(jobCountById);
+        });
+        return jobCountList;
     }
 }

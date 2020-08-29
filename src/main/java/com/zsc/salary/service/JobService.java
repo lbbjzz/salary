@@ -3,6 +3,7 @@ package com.zsc.salary.service;
 import com.zsc.salary.model.dto.JobDto;
 import com.zsc.salary.model.pojo.Job;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zsc.salary.model.vo.JobCountVO;
 
 import java.util.List;
 import java.util.Map;
@@ -64,4 +65,10 @@ public interface JobService extends IService<Job> {
      * @return true 表示岗位已存在
      */
     Boolean jobNameExist(String name);
+
+    /**
+     * 获取所有岗位的在岗人数
+     * @return 在岗人数数据List<JobCountVO>
+     */
+    List<JobCountVO> getJobCount();
 }
