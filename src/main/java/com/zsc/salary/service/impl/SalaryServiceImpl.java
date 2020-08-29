@@ -185,7 +185,7 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
         if (pageNo >= 0 && pageSize >= 0) {
             PageHelper.startPage(pageNo, pageSize);
         }
-        List<Employee> employeeList = employeeMapper.selectList(new QueryWrapper<Employee>().select("id"));
+        List<Employee> employeeList = employeeMapper.selectList(new QueryWrapper<Employee>().select("id").eq("status", 1));
         List<EmployeeSalaryVO> employeeSalaryVOList = new ArrayList<>();
         employeeList.forEach(employee -> {
             EmployeeSalaryVO employeeSalaryStat = salaryMapper.getEmployeeSalaryStat(employee.getId());
