@@ -181,14 +181,23 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
     }
 
     @Override
-    public List<EmployeeSalaryVO> getEmployeeSalaryStat() {
-        List<EmployeeSalaryVO> employeeSalaryVOList = new ArrayList<>();
+    public Map<String, Object> getEmployeeSalaryStat(Integer pageNo, Integer pageSize) {
+        if (pageNo >= 0 && pageSize >= 0) {
+            PageHelper.startPage(pageNo, pageSize);
+        }
         List<Employee> employeeList = employeeMapper.selectList(new QueryWrapper<Employee>().select("id"));
+        List<EmployeeSalaryVO> employeeSalaryVOList = new ArrayList<>();
         employeeList.forEach(employee -> {
             EmployeeSalaryVO employeeSalaryStat = salaryMapper.getEmployeeSalaryStat(employee.getId());
             employeeSalaryVOList.add(employeeSalaryStat);
         });
-        return employeeSalaryVOList;
+
+        PageInfo<Employee> pageInfo = new PageInfo<>(employeeList);
+
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("employeeSalaryVOList", employeeSalaryVOList);
+        map.put("total", pageInfo.getTotal());
+        return map;
     }
 
     @Override

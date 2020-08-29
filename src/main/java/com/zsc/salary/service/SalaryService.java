@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.zsc.salary.model.vo.EmployeeSalaryVO;
 import com.zsc.salary.model.vo.SalaryDeptStatVO;
 
+
 import java.util.List;
 import java.util.Map;
 
@@ -73,8 +74,18 @@ public interface SalaryService extends IService<Salary> {
      */
     List<SalaryDeptStatVO> getDeptYearlySalaryStat(String year);
 
+    /**
+     * 获取公司月度工资统计信息
+     * @param month 查询月份
+     * @return 公司工资统计数据Map
+     */
     Map<String, Object> getCompMonthlySalaryStat(String month);
 
+    /**
+     * 获取公司年度工资统计信息
+     * @param year 查询年份
+     * @return 公司工资统计数据Map
+     */
     Map<String, Object> getCompYearlySalaryStat(String year);
 
     /**
@@ -112,5 +123,9 @@ public interface SalaryService extends IService<Salary> {
      */
     void sendSalary(Integer deptId, String time);
 
-    List<EmployeeSalaryVO> getEmployeeSalaryStat();
+    /**
+     * 分页获取全部员工工资统计信息
+     * @return employeeSalaryVOList员工工资统计数据，total总个数
+     */
+    Map<String, Object> getEmployeeSalaryStat(Integer pageNo, Integer pageSize);
 }

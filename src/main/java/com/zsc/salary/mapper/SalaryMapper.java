@@ -1,5 +1,6 @@
 package com.zsc.salary.mapper;
 
+import com.zsc.salary.model.pojo.Employee;
 import com.zsc.salary.model.pojo.Salary;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.zsc.salary.model.vo.EmployeeSalaryVO;
@@ -56,8 +57,18 @@ public interface SalaryMapper extends BaseMapper<Salary> {
             "AND e.dept_id = #{deptId} AND DATE_FORMAT( s.create_time, '%Y-%m' ) = #{time}")
     Integer isSendSalary(Integer deptId, String time);
 
+    /**
+     * 获取公司月度工资统计信息
+     * @param queryMap 查询条件，queryDate查询月份
+     * @return 公司工资统计数据Map
+     */
     Map<String, Object> getCompMonthlySalaryStat(Map<String, Object> queryMap);
 
+    /**
+     * 获取公司年度工资统计信息
+     * @param queryMap 查询条件，queryDate查询年份
+     * @return 公司工资统计数据Map
+     */
     Map<String, Object> getCompYearlySalaryStat(Map<String, Object> queryMap);
 
     /**
@@ -82,5 +93,10 @@ public interface SalaryMapper extends BaseMapper<Salary> {
      */
     void updateSalaryStatus(Map<String, Object> map);
 
+    /**
+     * 获取员工工资统计信息
+     * @param employeeId 查询的员工id
+     * @return 员工共工资统计数据EmployeeSalaryVO
+     */
     EmployeeSalaryVO getEmployeeSalaryStat(Integer employeeId);
 }

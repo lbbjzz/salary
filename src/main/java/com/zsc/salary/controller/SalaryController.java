@@ -170,6 +170,7 @@ public class SalaryController {
         return GlobalResponse.success().data("isSend", isSend);
     }
 
+
     @ApiOperation(value = "给部门指定月份发放工资")
     @PostMapping("/generateSalary")
     public GlobalResponse generateSalary(Integer deptId, String time){
@@ -194,11 +195,14 @@ public class SalaryController {
         return GlobalResponse.success();
     }
 
-
+    @ApiOperation(value = "员工工资统计报表")
     @GetMapping("/getEmployeeSalaryStat")
-    public GlobalResponse getEmployeeSalaryStat() {
-        List<EmployeeSalaryVO> employeeSalaryStat = salaryService.getEmployeeSalaryStat();
-        return GlobalResponse.success().data("employeeSalaryStat", employeeSalaryStat);
+    public GlobalResponse getEmployeeSalaryStat(@RequestParam Integer pageNo, @RequestParam Integer pageSize) {
+        Map<String, Object> result = salaryService.getEmployeeSalaryStat(pageNo, pageSize);
+        if (result.isEmpty()) {
+            return GlobalResponse.failed().message("查询失败");
+        }
+        return GlobalResponse.success().data(result);
     }
 }
 
