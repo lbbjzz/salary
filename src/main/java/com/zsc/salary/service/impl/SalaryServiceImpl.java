@@ -14,10 +14,7 @@ import com.zsc.salary.model.dto.UpdateSalaryDto;
 import com.zsc.salary.model.pojo.*;
 import com.zsc.salary.model.pojo.*;
 import com.zsc.salary.mapper.SalaryMapper;
-import com.zsc.salary.model.vo.EmployeeSalaryVO;
-import com.zsc.salary.model.vo.EmployeeVO;
-import com.zsc.salary.model.vo.SalaryDeptStatVO;
-import com.zsc.salary.model.vo.SalaryVo;
+import com.zsc.salary.model.vo.*;
 import com.zsc.salary.service.DeptService;
 import com.zsc.salary.service.SalaryService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -198,6 +195,19 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
         map.put("employeeSalaryVOList", employeeSalaryVOList);
         map.put("total", pageInfo.getTotal());
         return map;
+    }
+
+    @Override
+    public Map<String, Object> listNetPayVo(Map<String, Object> map) {
+        Map<String, Object> result = new HashMap<>(2);
+        Integer pageNo = (Integer) map.get("pageNo");
+        Integer pageSize = (Integer) map.get("pageSize");
+        PageHelper.startPage(pageNo, pageSize);
+        List<NetPayVo> netPayVoList = salaryMapper.listNetPayVo(map);
+        PageInfo<NetPayVo> info = new PageInfo<>(netPayVoList);
+        result.put("netPayVoList", netPayVoList);
+        result.put("total", info.getTotal());
+        return result;
     }
 
     @Override

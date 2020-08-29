@@ -204,5 +204,27 @@ public class SalaryController {
         }
         return GlobalResponse.success().data(result);
     }
+
+    @ApiOperation(value = "查询员工实发工资", notes = "total为数据总数用于分页，netPayVoList 为查询的数据")
+    @GetMapping("/listNetPayVo/{pageNo}/{pageSize}/{deptId}/{employeeName}")
+    public GlobalResponse listNetPayVo(@PathVariable(value = "pageNo") Integer pageNo,
+                                            @PathVariable(value = "pageSize") Integer pageSize,
+                                            @PathVariable(value = "deptId") Integer deptId,
+                                            @PathVariable(value = "employeeName") String employeeName){
+
+        System.out.println("employeeName = " + employeeName);
+        System.out.println("deptId = " + deptId);
+        Map<String, Object> map = new HashMap<>();
+        if (deptId != 0) {
+            map.put("deptId", deptId);
+        }
+        if (!"null".equals(employeeName)) {
+            map.put("employeeName", employeeName);
+        }
+        map.put("pageNo", pageNo);
+        map.put("pageSize", pageSize);
+        Map<String, Object> resultMap = salaryService.listNetPayVo(map);
+        return GlobalResponse.success().data(resultMap).message("查询成功");
+    }
 }
 

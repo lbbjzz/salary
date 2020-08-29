@@ -28,7 +28,7 @@ public class TokenUtil {
     /**
      * 过期时间 1天
      */
-    private static final long EXPIRE_DATE= 60 * 60 * 24 * 1;
+    private static final long EXPIRE_DATE=  1000 * 60 * 60 * 24;
 
     /**
      * token密匙
@@ -47,14 +47,13 @@ public class TokenUtil {
                 .setSubject("JSON Web Token")
                 .setIssuedAt(new Date())
                 .signWith(SignatureAlgorithm.HS256, TOKEN_SECRET)
-                //过期时间
-                .setExpiration(new Date(time))
                 .setIssuer("DDanDang");
 
         //根据Map设置claims
         for(Map.Entry<String, Object> entry: map.entrySet()){
             jwtBuilder.claim(entry.getKey(),entry.getValue());
         }
+        jwtBuilder.setExpiration(new Date(time));
 
         //创建token
         //给token加密

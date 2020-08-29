@@ -4,6 +4,7 @@ import com.zsc.salary.model.pojo.Employee;
 import com.zsc.salary.model.pojo.Salary;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.zsc.salary.model.vo.EmployeeSalaryVO;
+import com.zsc.salary.model.vo.NetPayVo;
 import com.zsc.salary.model.vo.SalaryDeptStatVO;
 import com.zsc.salary.model.vo.SalaryVo;
 import org.apache.ibatis.annotations.Param;
@@ -99,4 +100,11 @@ public interface SalaryMapper extends BaseMapper<Salary> {
      * @return 员工共工资统计数据EmployeeSalaryVO
      */
     EmployeeSalaryVO getEmployeeSalaryStat(Integer employeeId);
+
+    /**
+     * 获取员工实发工资
+     * @param map 封装查询条件
+     * @return 员工实发工资
+     */
+    List<NetPayVo> listNetPayVo(Map<String, Object> map);
 }
