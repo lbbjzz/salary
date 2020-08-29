@@ -128,7 +128,6 @@ public interface SalaryService extends IService<Salary> {
      * @return employeeSalaryVOList员工工资统计数据，total总个数
      */
     Map<String, Object> getEmployeeSalaryStat(Integer pageNo, Integer pageSize);
-    List<EmployeeSalaryVO> getEmployeeSalaryStat();
 
     /**
      * 查询员工实发工资
