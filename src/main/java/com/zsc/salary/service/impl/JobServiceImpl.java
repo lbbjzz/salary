@@ -94,9 +94,12 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
 
     @Override
     public List<JobCountVO> getJobCount() {
+        //获取存在的全部岗位id
         List<Job> jobList = jobMapper.selectList(new QueryWrapper<Job>().select("id").eq("deleted", 0));
         List<JobCountVO> jobCountList = new ArrayList<>();
+        //遍历岗位id列表
         jobList.forEach(job -> {
+            //根据岗位id获取岗位的在岗人数
             JobCountVO jobCountById = jobMapper.getJobCountById(job.getId());
             jobCountList.add(jobCountById);
         });

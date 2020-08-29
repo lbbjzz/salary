@@ -49,6 +49,11 @@ public interface EmployeeService extends IService<Employee> {
      */
     Employee findById(Integer id);
 
+    /**
+     * 逻辑删除员工（改变员工状态status）
+     * @param id 要删除的员工id
+     * @return 删除结果，0为删除失败，1为删除成功
+     */
     int deleteById(Integer id);
 
     /**

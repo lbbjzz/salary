@@ -113,10 +113,13 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
 
     @Override
     public Map<String, Object> listSalaryVoDetail(Map<String, Object> map) {
+        //分页当前页
         Integer pageNo = (Integer) map.get("pageNo");
+        //分页大小
         Integer pageSize = (Integer) map.get("pageSize");
         Map<String, Object> result = new HashMap<>(2);
         PageHelper.startPage(pageNo, pageSize);
+        //获取工资查询报表
         List<SalaryVo> salaryVoList = salaryMapper.listSalaryVoDetail(map);
         PageInfo<SalaryVo> pageInfo = new PageInfo<>(salaryVoList);
         result.put("salaryVoList", salaryVoList);
@@ -129,18 +132,22 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
         if (month == null || deptId == null) {
             throw new RuntimeException("查询数据为空，查询失败");
         }
+        //查询条件map
         Map<String, Object> queryMap = new HashMap<>(2);
+        //查询月份
         queryMap.put("queryDate", month);
+        //查询的部门id
         queryMap.put("deptId", deptId);
-
+        //根据id获得部门月度工资统计数据
         return salaryMapper.getDeptMonthlySalaryStatById(queryMap);
-
     }
 
     @Override
     public List<SalaryDeptStatVO> getDeptMonthlySalaryStat(String month) {
+        //获取全部部门的信息
         List<Dept> deptList = deptService.allDept();
         List<SalaryDeptStatVO> salaryDeptStatVOList = new ArrayList<>();
+        //遍历根据部门id获得部门月度工资统计信息
         deptList.forEach(dept -> {
             SalaryDeptStatVO salaryDeptStatVO = this.getDeptMonthlySalaryStatById(month, dept.getId());
             salaryDeptStatVOList.add(salaryDeptStatVO);
@@ -153,17 +160,22 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
         if (year == null || deptId == null) {
             throw new RuntimeException("查询数据为空，查询失败");
         }
+        //查询条件map
         Map<String, Object> queryMap = new HashMap<>(2);
+        //查询年份
         queryMap.put("queryDate", year);
+        //查询的部门id
         queryMap.put("deptId", deptId);
-
+        //根据id获得部门年度工资统计数据
         return salaryMapper.getDeptYearlySalaryStatById(queryMap);
     }
 
     @Override
     public List<SalaryDeptStatVO> getDeptYearlySalaryStat(String year) {
+        //获取全部部门的信息
         List<Dept> deptList = deptService.allDept();
         List<SalaryDeptStatVO> salaryDeptStatVOList = new ArrayList<>();
+        //遍历根据部门id获得部门月度工资统计信息
         deptList.forEach(dept -> {
             SalaryDeptStatVO salaryDeptStatVO = this.getDeptYearlySalaryStatById(year, dept.getId());
             salaryDeptStatVOList.add(salaryDeptStatVO);
@@ -179,12 +191,16 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
 
     @Override
     public Map<String, Object> getEmployeeSalaryStat(Integer pageNo, Integer pageSize) {
+        //判断分页条件
         if (pageNo >= 0 && pageSize >= 0) {
             PageHelper.startPage(pageNo, pageSize);
         }
+        //获取在职的全部员工的id
         List<Employee> employeeList = employeeMapper.selectList(new QueryWrapper<Employee>().select("id").eq("status", 1));
         List<EmployeeSalaryVO> employeeSalaryVOList = new ArrayList<>();
+        //遍历员工id列表
         employeeList.forEach(employee -> {
+            //根据员工id获得员工工资统计信息
             EmployeeSalaryVO employeeSalaryStat = salaryMapper.getEmployeeSalaryStat(employee.getId());
             employeeSalaryVOList.add(employeeSalaryStat);
         });
@@ -217,7 +233,7 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
         }
         Map<String, Object> queryMap = new HashMap<>(2);
         queryMap.put("queryDate", month);
-
+        //根据月份month获取公司月度工资统计数据
         return salaryMapper.getCompMonthlySalaryStat(queryMap);
     }
 
@@ -228,7 +244,7 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
         }
         Map<String, Object> queryMap = new HashMap<>(2);
         queryMap.put("queryDate", year);
-
+        //根据年份year获取公司年度工资统计数据
         return salaryMapper.getCompYearlySalaryStat(queryMap);
     }
 

@@ -31,7 +31,11 @@ public interface SalaryMapper extends BaseMapper<Salary> {
      */
     List<SalaryVo> listSalaryVo(Map<String, Object> map);
 
-
+    /**
+     * 获取工资查询报表
+     * @param map 查询条件，beginDate开始时间，endDate结束时间，deptName部门名
+     * @return 工资查询报表
+     */
     List<SalaryVo> listSalaryVoDetail(Map<String, Object> map);
 
     /**

@@ -116,19 +116,23 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     @Override
     public Map<String, Object> listEmployeeVO(EmployeeDTO employeeDTO) {
         Map<String, Object> queryMap = new HashMap<>(5);
+        //要查询的部门id
         if (employeeDTO.getDeptId() != null) {
             queryMap.put("deptId", employeeDTO.getDeptId());
         }
+        //要查询的岗位id
         if (employeeDTO.getJobId() != null) {
             queryMap.put("jobId", employeeDTO.getJobId());
         }
+        //要查询的员工名
         if (employeeDTO.getEmployeeName() != null && !employeeDTO.getEmployeeName().isEmpty()) {
             queryMap.put("employeeName", employeeDTO.getEmployeeName());
         }
-
+        //判断是否分页
         if(employeeDTO.getPageNo() >= 0 && employeeDTO.getPageSize() >= 0){
             PageHelper.startPage(employeeDTO.getPageNo(), employeeDTO.getPageSize());
         }
+        //根据查询条件queryMap获取员工具体信息
         List<EmployeeVO> list = employeeMapper.listEmployeeVO(queryMap);
 
         PageInfo<EmployeeVO> pageInfo = new PageInfo<>(list);
@@ -156,9 +160,7 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
 
     @Override
     public int deleteById(Integer id) {
-        int flag = employeeMapper.deleteEmployeeById(id);
-        return flag;
-
+        return employeeMapper.deleteEmployeeById(id);
     }
 
     @Override
@@ -188,8 +190,7 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
 
     @Override
     public List<Employee> getEmployeeId() {
-        List<Employee> employeeList = employeeMapper.selectList(new QueryWrapper<Employee>().eq("status", 1).select("id"));
-        return employeeList;
+        return employeeMapper.selectList(new QueryWrapper<Employee>().eq("status", 1).select("id"));
     }
 
     private Map<String, Object> returnHeatingSubsidyMap(Integer[] employeeId, BigDecimal heatingSubsidy) {

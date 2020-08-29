@@ -38,6 +38,11 @@ public interface SalaryService extends IService<Salary> {
      */
     Map<String, Object> listSalaryVo(Map<String, Object> map);
 
+    /**
+     * 获取工资查询报表
+     * @param map 查询条件，beginDate开始时间，endDate结束时间，deptName部门名
+     * @return 工资报表数据
+     */
     Map<String, Object> listSalaryVoDetail(Map<String, Object> map);
 
     /**
@@ -125,6 +130,9 @@ public interface SalaryService extends IService<Salary> {
 
     /**
      * 分页获取全部员工工资统计信息
+     *
+     * @param pageNo 分页的当前页
+     * @param pageSize 分页的大小
      * @return employeeSalaryVOList员工工资统计数据，total总个数
      */
     Map<String, Object> getEmployeeSalaryStat(Integer pageNo, Integer pageSize);
