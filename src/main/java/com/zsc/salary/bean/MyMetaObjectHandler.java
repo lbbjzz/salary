@@ -48,7 +48,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.strictInsertFill(metaObject, "personalLeaveDay", Integer.class, 0);
         this.strictInsertFill(metaObject, "lateDay", Integer.class, 0);
         this.strictInsertFill(metaObject, "overtimeDay", Integer.class, 0);
-        this.strictInsertFill(metaObject, "backPay", Integer.class, 0);
+        this.strictInsertFill(metaObject, "backPay", BigDecimal.class, BigDecimal.valueOf(0));
     }
 
 

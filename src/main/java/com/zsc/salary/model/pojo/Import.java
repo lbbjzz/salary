@@ -31,7 +31,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="Import对象", description="")
+@ApiModel(value="Import对象")
 public class Import implements Serializable, Comparable<Import>{
 
     private static final long serialVersionUID=1L;
@@ -44,18 +44,23 @@ public class Import implements Serializable, Comparable<Import>{
     private Integer employeeId;
 
     @ApiModelProperty(value = "病假天数")
+    @TableField(fill = FieldFill.INSERT)
     private Integer sickLeaveDay;
 
     @ApiModelProperty(value = "事假天数")
+    @TableField(fill = FieldFill.INSERT)
     private Integer personalLeaveDay;
 
     @ApiModelProperty(value = "迟到次数")
+    @TableField(fill = FieldFill.INSERT)
     private Integer lateDay;
 
     @ApiModelProperty(value = "加班天数")
+    @TableField(fill = FieldFill.INSERT)
     private Integer overtimeDay;
 
     @ApiModelProperty(value = "补发")
+    @TableField(fill = FieldFill.INSERT)
     private BigDecimal backPay;
 
     @ApiModelProperty(value = "状态，0为未结算，1为已结算")

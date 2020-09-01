@@ -15,6 +15,7 @@ import com.zsc.salary.service.ImportService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.swagger.models.auth.In;
 import org.dozer.Mapper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -130,6 +131,17 @@ public class ImportServiceImpl extends ServiceImpl<ImportMapper, Import> impleme
         Map<String, Object> map = new HashMap<>(1);
         map.put("importId", importId);
         importMapper.deleteImportRepeat(map);
+    }
+
+    @Scheduled(cron = "0 0 0 1 * ? ")
+    @Override
+    public void monthImportData() {
+        List<Employee> employeeList = employeeMapper.selectList(new QueryWrapper<Employee>().eq("status", 1).select("id"));
+        Import importing = new Import();
+        employeeList.forEach(item -> {
+            importing.setEmployeeId(item.getId());
+            importMapper.insert(importing);
+        });
     }
 
 

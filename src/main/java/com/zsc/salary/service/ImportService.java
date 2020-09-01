@@ -75,4 +75,9 @@ public interface ImportService extends IService<Import> {
      */
     void deleteRepeatImportData(Integer[] id);
 
+    /**
+     * 每月导入数据
+     */
+    void monthImportData();
+
 }
